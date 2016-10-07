@@ -146,10 +146,10 @@ namespace octet {
 
     enum {
       num_sound_sources = 8,
-      num_rows = 5,
-      num_cols = 10,
-      num_missiles = 2,
-      num_bombs = 2,
+      num_rows = 4,
+      num_cols = 5,
+      num_missiles = 0,
+      num_bombs = 0,
       num_borders = 4,
       num_invaderers = num_rows * num_cols,
 
@@ -511,8 +511,8 @@ namespace octet {
       // set a viewport - includes whole window area
       glViewport(x, y, w, h);
 
-      // clear the background to black
-      glClearColor(0, 0, 0, 1);
+      // clear the background to green
+      glClearColor(0, 1, 0, 0);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       // don't allow Z buffer depth testing (closer objects are always drawn in front of far ones)

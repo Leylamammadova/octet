@@ -21,23 +21,57 @@ namespace octet {
     void app_init() {
       app_scene =  new visual_scene();
       app_scene->create_default_camera_and_lights();
-      app_scene->get_camera_instance(0)->get_node()->translate(vec3(0, 4, 0));
+      app_scene->get_camera_instance(0)->get_node()->translate(vec3(0, 8, 0));
 
       material *red = new material(vec4(1, 0, 0, 1));
       material *green = new material(vec4(0, 1, 0, 1));
       material *blue = new material(vec4(0, 0, 1, 1));
 
       mat4t mat;
-      mat.translate(-3, 6, 0);
-      app_scene->add_shape(mat, new mesh_sphere(vec3(2, 2, 2), 2), red, true);
+	  mat.loadIdentity();
+	  mat.translate(-5, 1, 0);
+	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), red, true);
+
+	  mat.loadIdentity();
+	  mat.translate(-4, 1, 0);
+	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), green, true);
 
       mat.loadIdentity();
-      mat.translate(0, 10, 0);
-      app_scene->add_shape(mat, new mesh_box(vec3(2, 2, 2)), red, true);
+      mat.translate( -3, 1, 0);
+	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), blue, true);
 
-      mat.loadIdentity();
-      mat.translate( 3, 6, 0);
-      app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 2, 4)), blue, true);
+	  mat.loadIdentity();
+	  mat.translate(-2, 1, 0);
+	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), red, true);
+
+	  mat.loadIdentity();
+	  mat.translate(-1, 1, 0);
+	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), green, true);
+
+	  mat.loadIdentity();
+	  mat.translate( 0, 1, 0);
+	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), blue, true);
+
+	  mat.loadIdentity();
+	  mat.translate( 1, 1, 0);
+	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), red, true);
+
+	  mat.loadIdentity();
+	  mat.translate( 2, 0, 0);
+	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), green, true);
+
+	  mat.loadIdentity();
+	  mat.translate( 3, 0, 0);
+	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), blue, true);
+	 
+	  mat.loadIdentity();
+	  mat.translate(4, 0, 0);
+	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), red, true);
+
+	  mat.loadIdentity();
+	  mat.translate(5, 0, 0);
+	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), green, true);
+
 
       // ground
       mat.loadIdentity();
