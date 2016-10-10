@@ -152,10 +152,10 @@ namespace octet {
       num_bombs = 0,
       num_borders = 4,
       num_invaderers = num_rows * num_cols,
-	  num_invaderers2 = num_rows * num_cols,
+	  
 
       // sprite definitions
-      ship_sprite = 0,
+      ship_sprite = 1,
       game_over_sprite,
 
       first_invaderer_sprite,
@@ -242,10 +242,16 @@ namespace octet {
       const float ship_speed = 0.05f;
       // left and right arrows
 	  if (is_key_down(key_up)) {
-		  sprites[ship_sprite].translate(0, ship_speed);
+		  sprites[ship_sprite].translate(0, +ship_speed);
+		  if (sprites[ship_sprite].collides_with(sprites[first_border_sprite+1])) {
+			  sprites[ship_sprite].translate(0, -ship_speed);
+		  }
 	  }
 	  if (is_key_down(key_down)) {
 		  sprites[ship_sprite].translate(0, -ship_speed);
+		  if (sprites[ship_sprite].collides_with(sprites[first_border_sprite])) {
+			  sprites[ship_sprite].translate(0, +ship_speed);
+		  }
 	  }
       if (is_key_down(key_left)) {
         sprites[ship_sprite].translate(-ship_speed, 0);
@@ -276,7 +282,7 @@ namespace octet {
         sprite &invaderer = sprites[first_invaderer_sprite+j];
         if (invaderer.is_enabled() && invaderer.collides_with(border)) {
           return true;
-        }
+        } 
       }
       return false;
     }
