@@ -184,7 +184,7 @@ namespace octet {
 
     // game state
     bool game_over;
-    int score;
+	int frames;
 
     // speed of enemy
     float invader_velocity;
@@ -216,7 +216,7 @@ namespace octet {
       alSourcePlay(source);
 
       live_invaderers--;
-      score++;
+      
       if (live_invaderers == 4) {
         invader_velocity *= 4;
       } else if (live_invaderers == 0) {
@@ -376,9 +376,9 @@ namespace octet {
       // sundry counters and game state.
       invader_velocity = 0.05f;
       live_invaderers = num_invaderers;
-      num_lives = 3;
+      num_lives = 1;
       game_over = false;
-      score = 0;
+	  frames = 0;
     }
 
     // called every frame to move things
@@ -386,8 +386,10 @@ namespace octet {
       if (game_over) {
 		  return;
       }
-
+	  
       move_ship();
+	  
+	  frames++;
 
       move_invaders(invader_velocity, 0);
 
@@ -399,8 +401,9 @@ namespace octet {
     }
 
     // this is called to draw the world
-    void draw_world(int x, int y, int w, int h) {
+	void draw_world(int x, int y, int w, int h) {
       simulate();
+
 
       // set a viewport - includes whole window area
       glViewport(x, y, w, h);
@@ -422,7 +425,7 @@ namespace octet {
       }
 
       char score_text[32];
-      sprintf(score_text, "score: %d   lives: %d\n", score, num_lives);
+      sprintf(score_text, "score: %d\n", frames);
       draw_text(texture_shader_, -1.75f, 2, 1.0f/256, score_text);
 
       // move the listener with the camera
