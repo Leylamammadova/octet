@@ -146,8 +146,8 @@ namespace octet {
 
     enum {
       num_sound_sources = 8,
-	  num_rows = 3,
-      num_cols = 4,
+	  num_rows = 1,
+      num_cols = 1,
       num_missiles = 0,
       num_bombs = 0,
       num_borders = 4,
@@ -155,7 +155,7 @@ namespace octet {
 	  
 
       // sprite definitions
-      ship_sprite = 1,
+      ship_sprite = 2,
       game_over_sprite,
 
       first_invaderer_sprite,
@@ -231,16 +231,20 @@ namespace octet {
       alSourcei(source, AL_BUFFER, bang);
       alSourcePlay(source);
 
-      if (--num_lives == 0) {
-        game_over = true;
-        sprites[game_over_sprite].translate(-20, 0);
-      }
     }
 
     // use the keyboard to move the ship
     void move_ship() {
+
       const float ship_speed = 0.05f;
       // left and right arrows
+	   if (sprites[ship_sprite].collides_with(sprites[last_invaderer_sprite])) {
+		   if (--num_lives == 0) {
+			   game_over = true;
+			   sprites[game_over_sprite].translate(-20, 0);
+		   }
+	  }
+
 	  if (is_key_down(key_up)) {
 		  sprites[ship_sprite].translate(0, +ship_speed);
 		  if (sprites[ship_sprite].collides_with(sprites[first_border_sprite+1])) {
@@ -329,6 +333,7 @@ namespace octet {
 
     // this is called once OpenGL is initialized
     void app_init() {
+		
       // set up the shader
       texture_shader_.init();
 
@@ -357,7 +362,7 @@ namespace octet {
       // set the border to white for clarity
       GLuint white = resource_dict::get_texture_handle(GL_RGB, "#ffffff");
       sprites[first_border_sprite+0].init(white, 0, -3, 7, 0.2f);
-      sprites[first_border_sprite+1].init(white, 0,  3, 0, 0);
+      sprites[first_border_sprite+1].init(white, 0,  3, 7, 0.2f);
       sprites[first_border_sprite+2].init(white, -3, 0, 1, 6);
       sprites[first_border_sprite+3].init(white, 3,  0, 1, 6);
 
@@ -379,7 +384,7 @@ namespace octet {
     // called every frame to move things
     void simulate() {
       if (game_over) {
-        return;
+		  return;
       }
 
       move_ship();
