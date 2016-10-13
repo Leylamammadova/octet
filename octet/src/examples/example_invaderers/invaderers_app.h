@@ -215,7 +215,6 @@ namespace octet {
       alSourcei(source, AL_BUFFER, bang);
       alSourcePlay(source);
 
-      live_invaderers--;
       
       if (live_invaderers == 4) {
         invader_velocity *= 4;
@@ -236,7 +235,7 @@ namespace octet {
     // use the keyboard to move the ship
     void move_ship() {
 
-      const float ship_speed = 0.05f;
+      const float ship_speed = 0.08f;
       // left and right arrows
 	   if (sprites[ship_sprite].collides_with(sprites[last_invaderer_sprite])) {
 		   if (--num_lives == 0) {
@@ -271,11 +270,11 @@ namespace octet {
     }
 
     // move the array of enemies
-    void move_invaders(float dx, float dy) {
+    void move_invaders( ) {
       for (int j = 0; j != num_invaderers; ++j) {
         sprite &invaderer = sprites[first_invaderer_sprite+j];
         if (invaderer.is_enabled()) {
-          invaderer.translate(dx, dy);
+			invaderer.translate(invader_velocity, -invader_velocity);
         }
       }
     }
@@ -335,7 +334,7 @@ namespace octet {
     void app_init() {
 		
       // set up the shader
-      texture_shader_.init();
+      texture_shader_.init();  
 
       // set up the matrices with a camera 5 units from the origin
       cameraToWorld.loadIdentity();
@@ -391,12 +390,12 @@ namespace octet {
 	  
 	  frames++;
 
-      move_invaders(invader_velocity, 0);
+      move_invaders();
 
       sprite &border = sprites[first_border_sprite+(invader_velocity < 0 ? 2 : 3)];
       if (invaders_collide(border)) {
         invader_velocity = -invader_velocity;
-        move_invaders(invader_velocity, -0.5f);
+		move_invaders();
       }
     }
 
