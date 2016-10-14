@@ -360,11 +360,12 @@ namespace octet {
 
 
       // set the border to white for clarity
-      GLuint white = resource_dict::get_texture_handle(GL_RGB, "#ffffff");
-      sprites[first_border_sprite+0].init(white, 0, -5, 10, 1);
-      sprites[first_border_sprite+1].init(white, 0,  5, 10, 1);
-      sprites[first_border_sprite+2].init(white, -5, 0, 1, 10);
-      sprites[first_border_sprite+3].init(white, 5,  0, 1, 10);
+	  GLuint purple = resource_dict::get_texture_handle(GL_RGB, "#91027b");
+	  GLuint blue = resource_dict::get_texture_handle(GL_RGB, "#00e5ff");
+      sprites[first_border_sprite+0].init(blue, 0, -5, 10, 1);
+      sprites[first_border_sprite+1].init(blue, 0,  5, 10, 1);
+      sprites[first_border_sprite+2].init(purple, -5, 0, 1, 10);
+      sprites[first_border_sprite+3].init(purple, 5,  0, 1, 10);
 
 
       // sounds
@@ -393,7 +394,7 @@ namespace octet {
 
       move_invaders();
 
-      sprite &border = sprites[first_border_sprite+(invader_velocity < 0 ? 1 : 3)];
+     sprite &border = sprites[first_border_sprite+(invader_velocity < 0 ? 1 : 3)];
       if (invaders_collide(border)) {
 		
         invader_velocity = -invader_velocity;

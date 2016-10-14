@@ -10,6 +10,7 @@
 #include "../../octet.h"
 #include "invaderers_app.h"
 #include <fstream>
+#include <string>
 
 /// Create a box with octet
 int main(int argc, char **argv) {
