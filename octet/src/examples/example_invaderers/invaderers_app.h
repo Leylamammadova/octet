@@ -338,7 +338,7 @@ namespace octet {
 
       // set up the matrices with a camera 5 units from the origin
       cameraToWorld.loadIdentity();
-      cameraToWorld.translate(0, 0, 4);
+      cameraToWorld.translate(0, 0, 5);
 
       font_texture = resource_dict::get_texture_handle(GL_RGBA, "assets/big_0.gif");
 
@@ -353,17 +353,18 @@ namespace octet {
         for (int i = 0; i != num_cols; ++i) {
           assert(first_invaderer_sprite + i + j*num_cols <= last_invaderer_sprite);
           sprites[first_invaderer_sprite + i + j*num_cols].init(
-            invaderer, ((float)i - num_cols * 0.5f) * 0.5f, 2.50f - ((float)j * 0.5f), 0.5f, 0.5f
+            invaderer, ((float)i - num_cols * 0.5f) * 0.5f, 2.50f - ((float)j * 0.5f), 1, 1
           );
         }
       }
 
+
       // set the border to white for clarity
       GLuint white = resource_dict::get_texture_handle(GL_RGB, "#ffffff");
-      sprites[first_border_sprite+0].init(white, 0, -3, 7, 0.2f);
-      sprites[first_border_sprite+1].init(white, 0,  3, 7, 0.2f);
-      sprites[first_border_sprite+2].init(white, -3, 0, 1, 6);
-      sprites[first_border_sprite+3].init(white, 3,  0, 1, 6);
+      sprites[first_border_sprite+0].init(white, 0, -5, 10, 1);
+      sprites[first_border_sprite+1].init(white, 0,  5, 10, 1);
+      sprites[first_border_sprite+2].init(white, -5, 0, 1, 10);
+      sprites[first_border_sprite+3].init(white, 5,  0, 1, 10);
 
 
       // sounds
@@ -392,8 +393,9 @@ namespace octet {
 
       move_invaders();
 
-      sprite &border = sprites[first_border_sprite+(invader_velocity < 0 ? 2 : 3)];
+      sprite &border = sprites[first_border_sprite+(invader_velocity < 0 ? 1 : 3)];
       if (invaders_collide(border)) {
+		
         invader_velocity = -invader_velocity;
 		move_invaders();
       }
@@ -407,7 +409,7 @@ namespace octet {
       // set a viewport - includes whole window area
       glViewport(x, y, w, h);
 
-      // clear the background to green
+      // clear the background to  green
       glClearColor(0, 1, 0, 0);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -425,7 +427,7 @@ namespace octet {
 
       char score_text[32];
       sprintf(score_text, "score: %d\n", frames);
-      draw_text(texture_shader_, -1.75f, 2, 1.0f/256, score_text);
+      draw_text(texture_shader_, -2.95f, 3.5, 1.0f/256, score_text);
 
       // move the listener with the camera
       vec4 &cpos = cameraToWorld.w();
