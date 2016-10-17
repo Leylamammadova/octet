@@ -150,13 +150,14 @@ namespace octet {
       num_cols = 1,
       num_missiles = 0,
       num_bombs = 0,
-      num_borders = 4,
+      num_borders = 10,
       num_invaderers = num_rows * num_cols,
 	  
 
       // sprite definitions
       ship_sprite = 2,
       game_over_sprite,
+	  wall_sprites,
 
       first_invaderer_sprite,
       last_invaderer_sprite = first_invaderer_sprite + num_invaderers - 1,
@@ -204,6 +205,7 @@ namespace octet {
     // a texture for our text
     GLuint font_texture;
 
+
     // information for our text
     bitmap_font font;
 
@@ -244,24 +246,24 @@ namespace octet {
 		   }
 	  }
 
-	  if (is_key_down(key_up)) {
+	  if (is_key_down(key_w)) {
 		  sprites[ship_sprite].translate(0, +ship_speed);
 		  if (sprites[ship_sprite].collides_with(sprites[first_border_sprite+1])) {
 			  sprites[ship_sprite].translate(0, -ship_speed);
 		  }
 	  }
-	  if (is_key_down(key_down)) {
+	  if (is_key_down(key_s)) {
 		  sprites[ship_sprite].translate(0, -ship_speed);
 		  if (sprites[ship_sprite].collides_with(sprites[first_border_sprite])) {
 			  sprites[ship_sprite].translate(0, +ship_speed);
 		  }
 	  }
-      if (is_key_down(key_left)) {
+      if (is_key_down(key_a)) {
         sprites[ship_sprite].translate(-ship_speed, 0);
         if (sprites[ship_sprite].collides_with(sprites[first_border_sprite+2])) {
           sprites[ship_sprite].translate(+ship_speed, 0);
         }
-      } else if (is_key_down(key_right)) {
+      } else if (is_key_down(key_d)) {
         sprites[ship_sprite].translate(+ship_speed, 0);
         if (sprites[ship_sprite].collides_with(sprites[first_border_sprite+3])) {
           sprites[ship_sprite].translate(-ship_speed, 0);
@@ -270,11 +272,11 @@ namespace octet {
     }
 
     // move the array of enemies
-    void move_invaders( ) {
+    void move_invaders(float dx, float dy) {
       for (int j = 0; j != num_invaderers; ++j) {
         sprite &invaderer = sprites[first_invaderer_sprite+j];
         if (invaderer.is_enabled()) {
-			invaderer.translate(invader_velocity, -invader_velocity);
+			invaderer.translate(dx, dy);
         }
       }
     }
@@ -289,6 +291,16 @@ namespace octet {
       }
       return false;
     }
+
+	/*string readfile(int ref) {
+		std::ifstream  file;
+		file.open("assests/map.txt");
+		if (file.fail()) {
+			enum error_ {
+				file_not_found,
+		};
+		}*/
+	
 
 
     void draw_text(texture_shader &shader, float x, float y, float scale, const char *text) {
@@ -330,42 +342,59 @@ namespace octet {
     invaderers_app(int argc, char **argv) : app(argc, argv), font(512, 256, "assets/big.fnt") {
     }
 
-    // this is called once OpenGL is initialized
-    void app_init() {
+	
+		// this is called once OpenGL is initialized
+    void app_init() { 
 		
       // set up the shader
       texture_shader_.init();  
 
       // set up the matrices with a camera 5 units from the origin
       cameraToWorld.loadIdentity();
-      cameraToWorld.translate(0, 0, 5);
+	  cameraToWorld.translate(0,0,5);
 
       font_texture = resource_dict::get_texture_handle(GL_RGBA, "assets/big_0.gif");
 
-      GLuint ship = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/ship.gif");
-      sprites[ship_sprite].init(ship, 0, -1.75f, 0.5f, 0.5f);
+	  GLuint ship = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/ship.gif");
+	  sprites[ship_sprite].init(ship, 0, -3, 0.5f, 0.5f);
 
       GLuint GameOver = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/GameOver.gif");
       sprites[game_over_sprite].init(GameOver, 20, 0, 3, 1.5f);
-
-      GLuint invaderer = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/invaderer.gif");
+      
+	  /* GLuint wall = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/wall.gif");
+      sprites[wall_sprites].init(wall, 0, 0, 10, 10);*/
+     
+	  GLuint invaderer = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/invaderer.gif");
       for (int j = 0; j != num_rows; ++j) {
         for (int i = 0; i != num_cols; ++i) {
           assert(first_invaderer_sprite + i + j*num_cols <= last_invaderer_sprite);
           sprites[first_invaderer_sprite + i + j*num_cols].init(
             invaderer, ((float)i - num_cols * 0.5f) * 0.5f, 2.50f - ((float)j * 0.5f), 1, 1
           );
+
+		  /*GLuint wall = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/wall.gif");
+		  sprites[wall_sprites].init(wall, 0, 0, 1, 1);*/
         }
       }
 
 
       // set the border to white for clarity
-	  GLuint purple = resource_dict::get_texture_handle(GL_RGB, "#91027b");
-	  GLuint blue = resource_dict::get_texture_handle(GL_RGB, "#00e5ff");
-      sprites[first_border_sprite+0].init(blue, 0, -5, 10, 1);
-      sprites[first_border_sprite+1].init(blue, 0,  5, 10, 1);
-      sprites[first_border_sprite+2].init(purple, -5, 0, 1, 10);
-      sprites[first_border_sprite+3].init(purple, 5,  0, 1, 10);
+	  //GLuint purple = resource_dict::get_texture_handle(GL_RGB, "#91027b");
+	  GLuint grey = resource_dict::get_texture_handle(GL_RGB, "#7a7a7a");
+	  GLuint wall = resource_dict::get_texture_handle(GL_RGB, "assets/invaderers/wall.gif");
+      //sprites[first_border_sprite+1].init(grey, 0,  5, 10, 1);
+      sprites[first_border_sprite+2].init(wall, -7, 0, 8, 20);
+      sprites[first_border_sprite+3].init(wall, 7,  0, 8, 20);
+	  sprites[first_border_sprite+0].init(grey, 0, -5, 10, 0.5f);
+	  
+	  ////building labrinth
+ //   sprites[first_border_sprite+4].init(wall, -2, -3, 5, 0.5f);
+	//sprites[first_border_sprite +5].init(wall, 3, -3, 4, 0.5f);
+	//sprites[first_border_sprite +6].init(wall, 2, -1.5f, 8, 0.5f);
+	//sprites[first_border_sprite +7].init(wall, -2, -1.5f, 2, 0.5f);
+
+	  
+
 
 
       // sounds
@@ -392,30 +421,31 @@ namespace octet {
 	  
 	  frames++;
 
-      move_invaders();
+      move_invaders(invader_velocity, 0);
 
-     sprite &border = sprites[first_border_sprite+(invader_velocity < 0 ? 1 : 3)];
+     sprite &border = sprites[first_border_sprite+(invader_velocity < 0 ? 2 : 3)];
       if (invaders_collide(border)) {
 		
-        invader_velocity = -invader_velocity;
-		move_invaders();
+		invader_velocity = -invader_velocity;
+		move_invaders(invader_velocity, -0.1f);
       }
     }
 
-    // this is called to draw the world
+	
+	 // this is called to draw the world
 	void draw_world(int x, int y, int w, int h) {
       simulate();
 
-
-      // set a viewport - includes whole window area
+	   // set a viewport - includes whole window area
       glViewport(x, y, w, h);
 
       // clear the background to  green
-      glClearColor(0, 1, 0, 0);
+
+      glClearColor(0, 1, 1, 0);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       // don't allow Z buffer depth testing (closer objects are always drawn in front of far ones)
-      glDisable(GL_DEPTH_TEST);
+	  glDisable(GL_DEPTH_TEST);
 
       // allow alpha blend (transparency when alpha channel is 0)
       glEnable(GL_BLEND);
