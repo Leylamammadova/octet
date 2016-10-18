@@ -237,7 +237,7 @@ namespace octet {
     // use the keyboard to move the ship
     void move_ship() {
 
-      const float ship_speed = 0.08f;
+      const float ship_speed = 0.1f;
       // left and right arrows
 	   if (sprites[ship_sprite].collides_with(sprites[last_invaderer_sprite])) {
 		   if (--num_lives == 0) {
@@ -300,6 +300,9 @@ namespace octet {
 				file_not_found,
 		};
 		}*/
+
+
+
 	
 
 
@@ -350,8 +353,8 @@ namespace octet {
       texture_shader_.init();  
 
       // set up the matrices with a camera 5 units from the origin
-      cameraToWorld.loadIdentity();
-	  cameraToWorld.translate(0,0,5);
+     /* cameraToWorld.loadIdentity();
+	  cameraToWorld.lookat(ship_sprite,vec3(0,0,5));*/
 
       font_texture = resource_dict::get_texture_handle(GL_RGBA, "assets/big_0.gif");
 
@@ -411,12 +414,19 @@ namespace octet {
 	  frames = 0;
     }
 
+	void move_camera( ) {
+		cameraToWorld.loadIdentity();
+		cameraToWorld.translate(0, frames/20, 5);
+
+	}
     // called every frame to move things
     void simulate() {
       if (game_over) {
 		  return;
       }
 	  
+	  move_camera();
+
       move_ship();
 	  
 	  frames++;
