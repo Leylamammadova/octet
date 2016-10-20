@@ -146,8 +146,8 @@ namespace octet {
 
     enum {
       num_sound_sources = 8,
-	  num_rows = 1,
-      num_cols = 1,
+	  num_rows = 20,
+      num_cols = 6,
       num_missiles = 0,
       num_bombs = 0,
       num_borders = 10,
@@ -272,25 +272,25 @@ namespace octet {
     }
 
     // move the array of enemies
-    void move_invaders(float dx, float dy) {
-      for (int j = 0; j != num_invaderers; ++j) {
-        sprite &invaderer = sprites[first_invaderer_sprite+j];
-        if (invaderer.is_enabled()) {
-			invaderer.translate(dx, dy);
-        }
-      }
-    }
+   // void move_invaders(float dx, float dy) {
+   //   for (int j = 0; j != num_invaderers; ++j) {
+   //     sprite &invaderer = sprites[first_invaderer_sprite+j];
+   //     if (invaderer.is_enabled()) {
+			//invaderer.translate(dx, dy);
+   //     }
+   //   }
+   // }
 
-    // check if any invaders hit the sides.
-    bool invaders_collide(sprite &border) {
-      for (int j = 0; j != num_invaderers; ++j) {
-        sprite &invaderer = sprites[first_invaderer_sprite+j];
-        if (invaderer.is_enabled() && invaderer.collides_with(border)) {
-          return true;
-        } 
-      }
-      return false;
-    }
+   // // check if any invaders hit the sides.
+   // bool invaders_collide(sprite &border) {
+   //   for (int j = 0; j != num_invaderers; ++j) {
+   //     sprite &invaderer = sprites[first_invaderer_sprite+j];
+   //     if (invaderer.is_enabled() && invaderer.collides_with(border)) {
+   //       return true;
+   //     } 
+   //   }
+   //   return false;
+   // }
 
 	/*string readfile(int ref) {
 		std::ifstream  file;
@@ -344,101 +344,143 @@ namespace octet {
     // this is called when we construct the class
     invaderers_app(int argc, char **argv) : app(argc, argv), font(512, 256, "assets/big.fnt") {
     }
+	//taken from Robert
+	char readfile(int arrayPos) {
+		std::ifstream myFile("borders.txt");
+		std::string text;
+		std::string com_line;
+		while (std::getline(myFile, text)) {
+			com_line += text;
+		}
+		char *chars = new char[com_line.length()];
+		std::strcpy(chars, com_line.c_str());
 
+		/*std::cout << com_line;*/
+
+		return chars[arrayPos];
+
+	}
 	
 		// this is called once OpenGL is initialized
-    void app_init() { 
+	void app_init() {
+
+		// set up the shader
+		texture_shader_.init();
+
+		// set up the matrices with a camera 5 units from the origin
+	   /* cameraToWorld.loadIdentity();
+		cameraToWorld.lookat(ship_sprite,vec3(0,0,5));*/
+
+		font_texture = resource_dict::get_texture_handle(GL_RGBA, "assets/big_0.gif");
+
+		GLuint ship = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/ship.gif");
+		sprites[ship_sprite].init(ship, 0, -3, 0.5f, 0.5f);
+
+		GLuint GameOver = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/GameOver.gif");
+		sprites[game_over_sprite].init(GameOver, 20, 15, 3, 1.5f);
+
+		/* GLuint wall = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/wall.gif");
+		sprites[wall_sprites].init(wall, 0, 0, 10, 10);*/
+
+
+
+		// set the border to white for clarity
+		//GLuint purple = resource_dict::get_texture_handle(GL_RGB, "#91027b");
+		GLuint grey = resource_dict::get_texture_handle(GL_RGB, "#7a7a7a");
+		GLuint wall = resource_dict::get_texture_handle(GL_RGB, "assets/invaderers/wall.gif");
+		//sprites[first_border_sprite+1].init(grey, 0,  5, 10, 1);
+		GLuint invaderer = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/invaderer.gif");
+		for (int j = 0; j != num_rows; ++j) {
+			for (int i = 0; i != num_cols; ++i) {
+				/* assert(first_invaderer_sprite + i + j*num_cols <= last_invaderer_sprite);
+				 sprites[first_invaderer_sprite + i + j*num_cols].init(
+				   invaderer, ((float)i - num_cols * 0.5f) * 0.5f, 20.50f - ((float)j * 0.5f), 5, 5
+				 );*/
+
+				 /*GLuint wall = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/wall.gif");
+				 sprites[wall_sprites].init(wall, 0, 0, 1, 1);*/
+
+				float tile_size = 0.5f;
+				float x = ((float)i - num_cols * 0.5f) * tile_size;
+				float y = 2.50f - ((float)j * tile_size);
+
+				switch (readfile(i + j*num_cols)) {
+				case 'b':
+
+					sprites[(first_border_sprite+1) + i + j*num_cols].init(wall, x, y, tile_size, tile_size);
+					break;
+				case '.':
+
+					/*sprites[wall_sprites + i + j*num_cols].init(wall, x, y, tile_size, tile_size);*/
+					break;
+				default:
+					std::cout << "not reading the file";
+				}
+			}
+		}
+			sprites[first_border_sprite + 2].init(wall, -7, 0, 8, 50);
+			sprites[first_border_sprite + 3].init(wall, 7, 0, 8, 50);
+			sprites[first_border_sprite + 0].init(grey, 0, -5, 10, 0.5f);
+
+
+
+
+
+			////building labrinth
+	   //   sprites[first_border_sprite+4].init(wall, -2, -3, 5, 0.5f);
+		  //sprites[first_border_sprite +5].init(wall, 3, -3, 4, 0.5f);
+		  //sprites[first_border_sprite +6].init(wall, 2, -1.5f, 8, 0.5f);
+		  //sprites[first_border_sprite +7].init(wall, -2, -1.5f, 2, 0.5f);
+
+
+
+
+
+			// sounds
+			whoosh = resource_dict::get_sound_handle(AL_FORMAT_MONO16, "assets/invaderers/whoosh.wav");
+			bang = resource_dict::get_sound_handle(AL_FORMAT_MONO16, "assets/invaderers/bang.wav");
+			cur_source = 0;
+			alGenSources(num_sound_sources, sources);
+
+			// sundry counters and game state.
+			invader_velocity = 0.05f;
+			live_invaderers = num_invaderers;
+			num_lives = 1;
+			game_over = false;
+			frames = 0;
 		
-      // set up the shader
-      texture_shader_.init();  
-
-      // set up the matrices with a camera 5 units from the origin
-     /* cameraToWorld.loadIdentity();
-	  cameraToWorld.lookat(ship_sprite,vec3(0,0,5));*/
-
-      font_texture = resource_dict::get_texture_handle(GL_RGBA, "assets/big_0.gif");
-
-	  GLuint ship = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/ship.gif");
-	  sprites[ship_sprite].init(ship, 0, -3, 0.5f, 0.5f);
-
-      GLuint GameOver = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/GameOver.gif");
-      sprites[game_over_sprite].init(GameOver, 20, 0, 3, 1.5f);
-      
-	  /* GLuint wall = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/wall.gif");
-      sprites[wall_sprites].init(wall, 0, 0, 10, 10);*/
-     
-	  GLuint invaderer = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/invaderer.gif");
-      for (int j = 0; j != num_rows; ++j) {
-        for (int i = 0; i != num_cols; ++i) {
-          assert(first_invaderer_sprite + i + j*num_cols <= last_invaderer_sprite);
-          sprites[first_invaderer_sprite + i + j*num_cols].init(
-            invaderer, ((float)i - num_cols * 0.5f) * 0.5f, 2.50f - ((float)j * 0.5f), 1, 1
-          );
-
-		  /*GLuint wall = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/wall.gif");
-		  sprites[wall_sprites].init(wall, 0, 0, 1, 1);*/
-        }
-      }
-
-
-      // set the border to white for clarity
-	  //GLuint purple = resource_dict::get_texture_handle(GL_RGB, "#91027b");
-	  GLuint grey = resource_dict::get_texture_handle(GL_RGB, "#7a7a7a");
-	  GLuint wall = resource_dict::get_texture_handle(GL_RGB, "assets/invaderers/wall.gif");
-      //sprites[first_border_sprite+1].init(grey, 0,  5, 10, 1);
-      sprites[first_border_sprite+2].init(wall, -7, 0, 8, 20);
-      sprites[first_border_sprite+3].init(wall, 7,  0, 8, 20);
-	  sprites[first_border_sprite+0].init(grey, 0, -5, 10, 0.5f);
-	  
-	  ////building labrinth
- //   sprites[first_border_sprite+4].init(wall, -2, -3, 5, 0.5f);
-	//sprites[first_border_sprite +5].init(wall, 3, -3, 4, 0.5f);
-	//sprites[first_border_sprite +6].init(wall, 2, -1.5f, 8, 0.5f);
-	//sprites[first_border_sprite +7].init(wall, -2, -1.5f, 2, 0.5f);
-
-	  
-
-
-
-      // sounds
-      whoosh = resource_dict::get_sound_handle(AL_FORMAT_MONO16, "assets/invaderers/whoosh.wav");
-      bang = resource_dict::get_sound_handle(AL_FORMAT_MONO16, "assets/invaderers/bang.wav");
-      cur_source = 0;
-      alGenSources(num_sound_sources, sources);
-
-      // sundry counters and game state.
-      invader_velocity = 0.05f;
-      live_invaderers = num_invaderers;
-      num_lives = 1;
-      game_over = false;
-	  frames = 0;
-    }
+	}
 
 	void move_camera( ) {
 		cameraToWorld.loadIdentity();
-		cameraToWorld.translate(0, frames/20, 5);
-
+		cameraToWorld.translate(0.0f, frames/20.0f, 5.0f);
+	
 	}
+	
+
     // called every frame to move things
     void simulate() {
       if (game_over) {
 		  return;
       }
 	  
+	  readfile(15);
+
 	  move_camera();
 
       move_ship();
 	  
 	  frames++;
 
-      move_invaders(invader_velocity, 0);
+     /* move_invaders(invader_velocity, 0);
 
      sprite &border = sprites[first_border_sprite+(invader_velocity < 0 ? 2 : 3)];
-      if (invaders_collide(border)) {
+      
+	 if (invaders_collide(border)) {
 		
 		invader_velocity = -invader_velocity;
 		move_invaders(invader_velocity, -0.1f);
-      }
+      }*/
     }
 
 	
@@ -446,6 +488,7 @@ namespace octet {
 	void draw_world(int x, int y, int w, int h) {
       simulate();
 
+	  
 	   // set a viewport - includes whole window area
       glViewport(x, y, w, h);
 
@@ -468,7 +511,7 @@ namespace octet {
 
       char score_text[32];
       sprintf(score_text, "score: %d\n", frames);
-      draw_text(texture_shader_, -2.95f, 3.5, 1.0f/256, score_text);
+      draw_text(texture_shader_, -2.95f, frames/20.0f, 1.0f/256, score_text);
 
       // move the listener with the camera
       vec4 &cpos = cameraToWorld.w();
