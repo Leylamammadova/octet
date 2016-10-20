@@ -146,27 +146,28 @@ namespace octet {
 
     enum {
       num_sound_sources = 8,
-	  num_rows = 20,
-      num_cols = 6,
-      num_missiles = 0,
-      num_bombs = 0,
+	  num_rows = 68,
+      num_cols = 16,
+      //num_missiles = 0,
+      //num_bombs = 0,
       num_borders = 10,
       num_invaderers = num_rows * num_cols,
 	  
+	  game_over_sprite,
 
       // sprite definitions
       ship_sprite = 2,
-      game_over_sprite,
+      
 	  wall_sprites,
 
       first_invaderer_sprite,
       last_invaderer_sprite = first_invaderer_sprite + num_invaderers - 1,
 
-      first_missile_sprite,
-      last_missile_sprite = first_missile_sprite + num_missiles - 1,
-
-      first_bomb_sprite,
-      last_bomb_sprite = first_bomb_sprite + num_bombs - 1,
+      //first_missile_sprite,
+      //last_missile_sprite = first_missile_sprite + num_missiles - 1,
+	  //
+      //first_bomb_sprite,
+      //last_bomb_sprite = first_bomb_sprite + num_bombs - 1,
 
       first_border_sprite,
       last_border_sprite = first_border_sprite + num_borders - 1,
@@ -212,7 +213,7 @@ namespace octet {
     ALuint get_sound_source() { return sources[cur_source++ % num_sound_sources]; }
 
     // called when we hit an enemy
-    void on_hit_invaderer() {
+    /*void on_hit_invaderer() {
       ALuint source = get_sound_source();
       alSourcei(source, AL_BUFFER, bang);
       alSourcePlay(source);
@@ -224,22 +225,22 @@ namespace octet {
         game_over = true;
         sprites[game_over_sprite].translate(-20, 0);
       }
-    }
+    }*/
 
     // called when we are hit
-    void on_hit_ship() {
+   /* void on_hit_ship() {
       ALuint source = get_sound_source();
       alSourcei(source, AL_BUFFER, bang);
       alSourcePlay(source);
 
-    }
+    }*/
 
-    // use the keyboard to move the ship
+    // use the wasd to move the ship
     void move_ship() {
 
       const float ship_speed = 0.1f;
       // left and right arrows
-	   if (sprites[ship_sprite].collides_with(sprites[last_invaderer_sprite])) {
+	   if (sprites[ship_sprite].collides_with(sprites[first_border_sprite])) {
 		   if (--num_lives == 0) {
 			   game_over = true;
 			   sprites[game_over_sprite].translate(-20, 0);
@@ -248,11 +249,11 @@ namespace octet {
 
 	  if (is_key_down(key_w)) {
 		  sprites[ship_sprite].translate(0, +ship_speed);
-		  if (sprites[ship_sprite].collides_with(sprites[first_border_sprite+1])) {
+		  if (sprites[ship_sprite].collides_with(sprites[wall_sprites])) {
 			  sprites[ship_sprite].translate(0, -ship_speed);
 		  }
 	  }
-	  if (is_key_down(key_s)) {
+	  else if (is_key_down(key_s)) {
 		  sprites[ship_sprite].translate(0, -ship_speed);
 		  if (sprites[ship_sprite].collides_with(sprites[first_border_sprite])) {
 			  sprites[ship_sprite].translate(0, +ship_speed);
@@ -376,8 +377,8 @@ namespace octet {
 		GLuint ship = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/ship.gif");
 		sprites[ship_sprite].init(ship, 0, -3, 0.5f, 0.5f);
 
-		GLuint GameOver = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/GameOver.gif");
-		sprites[game_over_sprite].init(GameOver, 20, 15, 3, 1.5f);
+		//GLuint GameOver = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/GameOver.gif");
+		//sprites[game_over_sprite].init(GameOver, 20, frames/20.0f, 3, 1.5f);
 
 		/* GLuint wall = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/wall.gif");
 		sprites[wall_sprites].init(wall, 0, 0, 10, 10);*/
@@ -390,6 +391,7 @@ namespace octet {
 		GLuint wall = resource_dict::get_texture_handle(GL_RGB, "assets/invaderers/wall.gif");
 		//sprites[first_border_sprite+1].init(grey, 0,  5, 10, 1);
 		GLuint invaderer = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/invaderer.gif");
+
 		for (int j = 0; j != num_rows; ++j) {
 			for (int i = 0; i != num_cols; ++i) {
 				/* assert(first_invaderer_sprite + i + j*num_cols <= last_invaderer_sprite);
@@ -402,36 +404,27 @@ namespace octet {
 
 				float tile_size = 0.5f;
 				float x = ((float)i - num_cols * 0.5f) * tile_size;
-				float y = 2.50f - ((float)j * tile_size);
-
+				float y = 35.50f - ((float)j * tile_size);
+				
 				switch (readfile(i + j*num_cols)) {
 				case 'b':
 
-					sprites[(first_border_sprite+1) + i + j*num_cols].init(wall, x, y, tile_size, tile_size);
+					sprites[wall_sprites + i + j*num_cols].init(wall, x, y, tile_size, tile_size);
 					break;
 				case '.':
 
-					/*sprites[wall_sprites + i + j*num_cols].init(wall, x, y, tile_size, tile_size);*/
 					break;
+				/*case 'X':
+					sprites[first_invaderer_sprite + i + j*num_cols].init(invaderer, x, y, 5, 5);
+					break;*/
 				default:
 					std::cout << "not reading the file";
 				}
 			}
 		}
-			sprites[first_border_sprite + 2].init(wall, -7, 0, 8, 50);
-			sprites[first_border_sprite + 3].init(wall, 7, 0, 8, 50);
-			sprites[first_border_sprite + 0].init(grey, 0, -5, 10, 0.5f);
-
-
-
-
-
-			////building labrinth
-	   //   sprites[first_border_sprite+4].init(wall, -2, -3, 5, 0.5f);
-		  //sprites[first_border_sprite +5].init(wall, 3, -3, 4, 0.5f);
-		  //sprites[first_border_sprite +6].init(wall, 2, -1.5f, 8, 0.5f);
-		  //sprites[first_border_sprite +7].init(wall, -2, -1.5f, 2, 0.5f);
-
+			sprites[first_border_sprite + 2].init(wall, -7, 0, 8, 100);
+			sprites[first_border_sprite + 3].init(wall, 7, 0, 8, 100);
+			//sprites[first_border_sprite + 0].init(grey, 0, frames/10.0f, 10, 0.5f);
 
 
 
@@ -454,7 +447,7 @@ namespace octet {
 	void move_camera( ) {
 		cameraToWorld.loadIdentity();
 		cameraToWorld.translate(0.0f, frames/20.0f, 5.0f);
-	
+		
 	}
 	
 
@@ -463,10 +456,16 @@ namespace octet {
       if (game_over) {
 		  return;
       }
-	  
-	  readfile(15);
+	  //made the bottom border kill the player 
+	  GLuint grey = resource_dict::get_texture_handle(GL_RGB, "#7a7a7a");
+	  float m = -5 + frames /24.0f;
+	  sprites[first_border_sprite + 0].init(grey, 0, m, 10, 0.5f);
+	 
+	  //made game over appear in front of eyes 
+	  GLuint GameOver = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/GameOver.gif");
+	  sprites[game_over_sprite].init(GameOver, 20, frames / 20.0f, 3, 1.5f);
 
-	  move_camera();
+      move_camera();
 
       move_ship();
 	  

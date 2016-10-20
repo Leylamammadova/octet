@@ -221,9 +221,6 @@
     <None Include="..\..\resources\mesh_builder.inl" />
     <None Include="..\..\resources\resources.inl" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\..\..\..\..\..\Desktop\map.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

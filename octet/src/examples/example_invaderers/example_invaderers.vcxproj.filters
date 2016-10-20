@@ -439,9 +439,4 @@
       <Filter>resources</Filter>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\..\..\..\..\..\Desktop\map.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-  </ItemGroup>
 </Project>
