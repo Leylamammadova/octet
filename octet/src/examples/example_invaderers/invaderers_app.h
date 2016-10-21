@@ -150,7 +150,7 @@ namespace octet {
       num_cols = 16,
       //num_missiles = 0,
       //num_bombs = 0,
-	  youshallnot_sprites,
+	  clouds_sprites,
       num_borders = 10,
       num_invaderers = num_rows * num_cols,
 	  
@@ -240,7 +240,7 @@ namespace octet {
     void move_ship() {
 
       const float ship_speed = 0.1f;
-      
+      //if you stuck you die
 	   if (sprites[ship_sprite].collides_with(sprites[first_border_sprite])) {
 		   if (--num_lives == 0) {
 			   game_over = true;
@@ -364,6 +364,8 @@ namespace octet {
     // this is called when we construct the class
     invaderers_app(int argc, char **argv) : app(argc, argv), font(512, 256, "assets/big.fnt") {
     }
+	
+	
 	//big thanks to Robert for explaining me this
 	//http://stackoverflow.com/questions/13035674/how-to-read-line-by-line-or-a-whole-text-file-at-once
 
@@ -413,7 +415,8 @@ namespace octet {
 		GLuint wall = resource_dict::get_texture_handle(GL_RGB, "assets/invaderers/wall.gif");
 		//sprites[first_border_sprite+1].init(grey, 0,  5, 10, 1);
 		GLuint invaderer = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/invaderer.gif");
-		GLuint shallnot = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/you_shall_not_pass.gif");
+		GLuint clouds = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/clouds.gif");
+		sprites[clouds_sprites].init(clouds, 0, 58, 5, 6);
 
 		for (int j = 0; j != num_rows; ++j) {
 			for (int i = 0; i != num_cols; ++i) {
@@ -437,9 +440,9 @@ namespace octet {
 				case '.':
 
 					break;
-				case 'X':
-					sprites[youshallnot_sprites + i + j*num_cols].init(shallnot, x, y, 6, 6);
-					break;
+				//case 'X':
+					//sprites[clouds_sprites + i + j*num_cols].init(clouds, x, y, 6, 6);
+					//break;
 				default:
 					std::cout << "not reading the file";
 				}
@@ -479,7 +482,7 @@ namespace octet {
       if (game_over) {
 		  return;
       }
-	  //made the bottom border kill the player 
+	  //made the bottom border follow the player
 	  GLuint grey = resource_dict::get_texture_handle(GL_RGB, "#7a7a7a");
 	  float m = -5 + frames /24.0f;
 	  sprites[first_border_sprite + 0].init(grey, 0, m, 10, 0.5f);
@@ -496,7 +499,10 @@ namespace octet {
       move_ship();
 	  
 	  frames++;
-
+	  //restarts the game
+	  if (is_key_down(key_shift)) {
+		  return app_init();
+	   }
 
 
      /* move_invaders(invader_velocity, 0);
@@ -520,8 +526,9 @@ namespace octet {
       glViewport(x, y, w, h);
 
       // clear the background to  green
-
-      glClearColor(1, 1, 0, 0);
+	  
+	  
+      glClearColor(0, 1, 1, 0);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       // don't allow Z buffer depth testing (closer objects are always drawn in front of far ones)
@@ -538,8 +545,8 @@ namespace octet {
 
       char score_text[32];
       sprintf(score_text, "score: %d\n", frames);
-      draw_text(texture_shader_, -3.0f, frames/20.0f, 1.0f/256, score_text);
-
+	  draw_text(texture_shader_, -3.0f, frames / 20.0f, 1.0f / 256, score_text);
+	  
       // move the listener with the camera
       vec4 &cpos = cameraToWorld.w();
       alListener3f(AL_POSITION, cpos.x(), cpos.y(), cpos.z());
