@@ -146,10 +146,11 @@ namespace octet {
 
     enum {
       num_sound_sources = 8,
-	  num_rows = 68,
+	  num_rows = 112,
       num_cols = 16,
       //num_missiles = 0,
       //num_bombs = 0,
+	  youshallnot_sprites,
       num_borders = 10,
       num_invaderers = num_rows * num_cols,
 	  
@@ -239,34 +240,52 @@ namespace octet {
     void move_ship() {
 
       const float ship_speed = 0.1f;
-      // left and right arrows
+      
 	   if (sprites[ship_sprite].collides_with(sprites[first_border_sprite])) {
 		   if (--num_lives == 0) {
 			   game_over = true;
 			   sprites[game_over_sprite].translate(-20, 0);
 		   }
 	  }
-
-	  if (is_key_down(key_w)) {
+	  
+	  if(is_key_down(key_w)) {
 		  sprites[ship_sprite].translate(0, +ship_speed);
-		  if (sprites[ship_sprite].collides_with(sprites[wall_sprites])) {
-			  sprites[ship_sprite].translate(0, -ship_speed);
+		  for (int i = 0; i < num_invaderers; i++) {
+			  if (sprites[ship_sprite].collides_with(sprites[wall_sprites+i])) {
+				  sprites[ship_sprite].translate(0, -ship_speed);
+			  }
 		  }
 	  }
 	  else if (is_key_down(key_s)) {
 		  sprites[ship_sprite].translate(0, -ship_speed);
-		  if (sprites[ship_sprite].collides_with(sprites[first_border_sprite])) {
+		 if (sprites[ship_sprite].collides_with(sprites[first_border_sprite])) {
 			  sprites[ship_sprite].translate(0, +ship_speed);
 		  }
+		 for (int i = 0; i < num_invaderers; i++) {
+			 if (sprites[ship_sprite].collides_with(sprites[wall_sprites + i])) {
+				 sprites[ship_sprite].translate(0, +ship_speed);
+			 }
+
+		 }
 	  }
       if (is_key_down(key_a)) {
         sprites[ship_sprite].translate(-ship_speed, 0);
+		for (int i = 0; i < num_invaderers; i++) {
+			if (sprites[ship_sprite].collides_with(sprites[wall_sprites + i])) {
+				sprites[ship_sprite].translate(+ship_speed, 0);
+			}
+		}
         if (sprites[ship_sprite].collides_with(sprites[first_border_sprite+2])) {
           sprites[ship_sprite].translate(+ship_speed, 0);
         }
       } else if (is_key_down(key_d)) {
         sprites[ship_sprite].translate(+ship_speed, 0);
-        if (sprites[ship_sprite].collides_with(sprites[first_border_sprite+3])) {
+		for (int i = 0; i < num_invaderers; i++) {
+			if (sprites[ship_sprite].collides_with(sprites[wall_sprites + i])) {
+				sprites[ship_sprite].translate(-ship_speed, 0);
+			}
+		}
+		if (sprites[ship_sprite].collides_with(sprites[first_border_sprite+3])) {
           sprites[ship_sprite].translate(-ship_speed, 0);
         }
       }
@@ -345,7 +364,9 @@ namespace octet {
     // this is called when we construct the class
     invaderers_app(int argc, char **argv) : app(argc, argv), font(512, 256, "assets/big.fnt") {
     }
-	//taken from Robert
+	//big thanks to Robert for explaining me this
+	//http://stackoverflow.com/questions/13035674/how-to-read-line-by-line-or-a-whole-text-file-at-once
+
 	char readfile(int arrayPos) {
 		std::ifstream myFile("borders.txt");
 		std::string text;
@@ -353,10 +374,11 @@ namespace octet {
 		while (std::getline(myFile, text)) {
 			com_line += text;
 		}
+		// http://www.cplusplus.com/forum/general/100714/
 		char *chars = new char[com_line.length()];
 		std::strcpy(chars, com_line.c_str());
 
-		/*std::cout << com_line;*/
+		
 
 		return chars[arrayPos];
 
@@ -373,24 +395,25 @@ namespace octet {
 		cameraToWorld.lookat(ship_sprite,vec3(0,0,5));*/
 
 		font_texture = resource_dict::get_texture_handle(GL_RGBA, "assets/big_0.gif");
-
+		//i do not own this picture
 		GLuint ship = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/ship.gif");
 		sprites[ship_sprite].init(ship, 0, -3, 0.5f, 0.5f);
 
 		//GLuint GameOver = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/GameOver.gif");
 		//sprites[game_over_sprite].init(GameOver, 20, frames/20.0f, 3, 1.5f);
-
-		/* GLuint wall = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/wall.gif");
-		sprites[wall_sprites].init(wall, 0, 0, 10, 10);*/
+		//i do not own this picture
+		GLuint brick = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/brick.gif");
 
 
 
 		// set the border to white for clarity
 		//GLuint purple = resource_dict::get_texture_handle(GL_RGB, "#91027b");
 		GLuint grey = resource_dict::get_texture_handle(GL_RGB, "#7a7a7a");
+		//i do not own this picture
 		GLuint wall = resource_dict::get_texture_handle(GL_RGB, "assets/invaderers/wall.gif");
 		//sprites[first_border_sprite+1].init(grey, 0,  5, 10, 1);
 		GLuint invaderer = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/invaderer.gif");
+		GLuint shallnot = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/you_shall_not_pass.gif");
 
 		for (int j = 0; j != num_rows; ++j) {
 			for (int i = 0; i != num_cols; ++i) {
@@ -404,26 +427,26 @@ namespace octet {
 
 				float tile_size = 0.5f;
 				float x = ((float)i - num_cols * 0.5f) * tile_size;
-				float y = 35.50f - ((float)j * tile_size);
+				float y = 55.50f - ((float)j * tile_size);
 				
 				switch (readfile(i + j*num_cols)) {
 				case 'b':
 
-					sprites[wall_sprites + i + j*num_cols].init(wall, x, y, tile_size, tile_size);
+					sprites[wall_sprites + i + j*num_cols].init(brick, x, y, tile_size, tile_size);
 					break;
 				case '.':
 
 					break;
-				/*case 'X':
-					sprites[first_invaderer_sprite + i + j*num_cols].init(invaderer, x, y, 5, 5);
-					break;*/
+				case 'X':
+					sprites[youshallnot_sprites + i + j*num_cols].init(shallnot, x, y, 6, 6);
+					break;
 				default:
 					std::cout << "not reading the file";
 				}
 			}
 		}
-			sprites[first_border_sprite + 2].init(wall, -7, 0, 8, 100);
-			sprites[first_border_sprite + 3].init(wall, 7, 0, 8, 100);
+			sprites[first_border_sprite + 2].init(wall, -7, 0, 8, 20);
+			sprites[first_border_sprite + 3].init(wall, 7, 0, 8, 20);
 			//sprites[first_border_sprite + 0].init(grey, 0, frames/10.0f, 10, 0.5f);
 
 
@@ -464,12 +487,17 @@ namespace octet {
 	  //made game over appear in front of eyes 
 	  GLuint GameOver = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/GameOver.gif");
 	  sprites[game_over_sprite].init(GameOver, 20, frames / 20.0f, 3, 1.5f);
-
+	  //borders are moving up too
+	  GLuint wall = resource_dict::get_texture_handle(GL_RGB, "assets/invaderers/wall.gif");
+	  sprites[first_border_sprite + 2].init(wall, -7, frames/20.0f, 8, 10);
+	  sprites[first_border_sprite + 3].init(wall, 7, frames / 20.0f, 8, 10);
       move_camera();
 
       move_ship();
 	  
 	  frames++;
+
+
 
      /* move_invaders(invader_velocity, 0);
 
@@ -493,7 +521,7 @@ namespace octet {
 
       // clear the background to  green
 
-      glClearColor(0, 1, 1, 0);
+      glClearColor(1, 1, 0, 0);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       // don't allow Z buffer depth testing (closer objects are always drawn in front of far ones)
@@ -510,7 +538,7 @@ namespace octet {
 
       char score_text[32];
       sprintf(score_text, "score: %d\n", frames);
-      draw_text(texture_shader_, -2.95f, frames/20.0f, 1.0f/256, score_text);
+      draw_text(texture_shader_, -3.0f, frames/20.0f, 1.0f/256, score_text);
 
       // move the listener with the camera
       vec4 &cpos = cameraToWorld.w();
