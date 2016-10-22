@@ -29,55 +29,21 @@ namespace octet {
 
       mat4t mat;
 	  mat.loadIdentity();
-	  mat.translate(-5, 1, 0);
-	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), red, true);
-
-	  mat.loadIdentity();
-	  mat.translate(-4, 1, 0);
-	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), green, true);
-
-      mat.loadIdentity();
-      mat.translate( -3, 1, 0);
-	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), blue, true);
-
-	  mat.loadIdentity();
-	  mat.translate(-2, 1, 0);
-	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), red, true);
-
-	  mat.loadIdentity();
-	  mat.translate(-1, 1, 0);
-	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), green, true);
-
-	  mat.loadIdentity();
-	  mat.translate( 0, 1, 0);
-	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), blue, true);
-
-	  mat.loadIdentity();
-	  mat.translate( 1, 1, 0);
-	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), red, true);
-
-	  mat.loadIdentity();
-	  mat.translate( 2, 0, 0);
-	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), green, true);
-
-	  mat.loadIdentity();
-	  mat.translate( 3, 0, 0);
-	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), blue, true);
+	  //mat.translate(-5, 1, 0);
+	  //app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), red, true);
+	  for (int i = 0; i <= 10; ++i) {
+		     mat4t mat;
+			  //mat.loadIdentity();
+			  mat.translate((float)i, 5, 1);
+			  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 1.0f, 1.0f)), red, true);
+	  }
 	 
-	  mat.loadIdentity();
-	  mat.translate(4, 0, 0);
-	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), red, true);
-
-	  mat.loadIdentity();
-	  mat.translate(5, 0, 0);
-	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), green, true);
-
-
       // ground
       mat.loadIdentity();
       mat.translate(0, -1, 0);
       app_scene->add_shape(mat, new mesh_box(vec3(200, 1, 200)), green, false);
     }
+
 
     /// this is called to draw the world
     void draw_world(int x, int y, int w, int h) {
@@ -91,5 +57,7 @@ namespace octet {
       // draw the scene
       app_scene->render((float)vx / vy);
     }
+
   };
+   
 }
