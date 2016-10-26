@@ -16,28 +16,69 @@ namespace octet {
 
     ~example_shapes() {
     }
-
+	
+	
     /// this is called once OpenGL is initialized
     void app_init() {
       app_scene =  new visual_scene();
       app_scene->create_default_camera_and_lights();
       app_scene->get_camera_instance(0)->get_node()->translate(vec3(0, 8, 0));
 
+
+	
+
       material *red = new material(vec4(1, 0, 0, 1));
       material *green = new material(vec4(0, 1, 0, 1));
       material *blue = new material(vec4(0, 0, 1, 1));
 
-      mat4t mat;
+	  mat4t mat;
 	  mat.loadIdentity();
-	  //mat.translate(-5, 1, 0);
-	  //app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.5f, 0.5f)), red, true);
-	  for (int i = 0; i <= 10; ++i) {
-		     mat4t mat;
-			  //mat.loadIdentity();
-			  mat.translate((float)i, 5, 1);
-			  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 1.0f, 1.0f)), red, true);
-	  }
-	 
+	  mat.translate(6, 4, 1);
+	  mesh_instance* meshA = app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.8f, 2.0f)), red, true);
+	  btRigidBody *rbA = meshA->get_node()->get_rigid_body();
+	  
+	  mat.loadIdentity();
+	  mat.translate(4, 4, 1);
+	  mesh_instance* meshB= app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.8f, 2.0f)), red, true);
+	  btRigidBody *rbB = meshB->get_node()->get_rigid_body();
+	  
+	  btHingeConstraint* hingeAB;
+
+	  btVector3 axisA(1.0f, 0.f, 0.0f);
+	  btVector3 axisB(1.0f, 0.f, 0.0f);
+	  btVector3 pivotA(-1.0f, 0.0f, 0.0f);
+	  btVector3 pivotB(1.0f, 0.0f, 0.0f);
+	  hingeAB = new btHingeConstraint(*rbA, *rbB, pivotA, pivotB, axisA, axisB);
+	  hingeAB->setLimit(-SIMD_HALF_PI * 1.0f, SIMD_HALF_PI * 1.0f);
+	  // add constraint to world
+	  app_scene->get_world()->addConstraint(hingeAB, true);
+	  // draw constraint frames and limits for debugging
+	 // spHingeDynAB->setDbgDrawSize(btScalar(5.f));
+
+
+
+
+	  mat.loadIdentity();
+	  mat.translate(8, 0, 0);
+	  mat.rotateX90();
+	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.8f, 3.0f)), blue, true);
+
+	  mat.loadIdentity();
+	  mat.translate(8, 0, 4);
+	  mat.rotateX90();
+	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.8f, 3.0f)), blue, true);
+
+	  mat.loadIdentity();
+	  mat.translate(-8, 0, 0);
+	  mat.rotateX90();
+	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.8f, 3.0f)), blue, true);
+
+	  mat.loadIdentity();
+	  mat.translate(-8, 0, 4);
+	  mat.rotateX90();
+	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.8f, 3.0f)), blue, true);
+
+	  
       // ground
       mat.loadIdentity();
       mat.translate(0, -1, 0);
