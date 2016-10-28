@@ -29,69 +29,111 @@ namespace octet {
 
       material *red = new material(vec4(1, 0, 0, 1));
       material *green = new material(vec4(0, 1, 0, 1));
-      material *blue = new material(vec4(0, 0, 1, 1));
+	  material *blue = new material(vec4(0, 0, 1, 1));
+	  material *yellow = new material(vec4(1, 1, 0, 1));
+	  material *mehblue = new material(vec4(0, 1, 1, 1));
+	  
 
 	  mat4t mat;
+	  //banks
 	  mat.loadIdentity();
-	  mat.translate(6, 4, 1);
-	  mesh_instance* meshA = app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.8f, 2.0f)), red, true);
+	  mat.translate(14, 0, 1);
+	  mesh_instance* meshA = app_scene->add_shape(mat, new mesh_box(vec3(5, 2, 200)), mehblue, false);
 	  btRigidBody *rbA = meshA->get_node()->get_rigid_body();
-	  
+
 	  mat.loadIdentity();
-	  mat.translate(4, 4, 1);
-	  mesh_instance* meshB= app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.8f, 2.0f)), red, true);
+	  mat.translate(-14, 0, 1);
+	  mesh_instance* meshB = app_scene->add_shape(mat, new mesh_box(vec3(5, 2,200)), mehblue, false);
 	  btRigidBody *rbB = meshB->get_node()->get_rigid_body();
-	  
-	  btHingeConstraint* hingeAB;
 
-	  btVector3 axisA(1.0f, 0.f, 0.0f);
-	  btVector3 axisB(1.0f, 0.f, 0.0f);
-	  btVector3 pivotA(-1.0f, 0.0f, 0.0f);
-	  btVector3 pivotB(1.0f, 0.0f, 0.0f);
-	  hingeAB = new btHingeConstraint(*rbA, *rbB, pivotA, pivotB, axisA, axisB);
-	  hingeAB->setLimit(-SIMD_HALF_PI * 1.0f, SIMD_HALF_PI * 1.0f);
-	  // add constraint to world
-	  app_scene->get_world()->addConstraint(hingeAB, true);
-	  // draw constraint frames and limits for debugging
-	 // spHingeDynAB->setDbgDrawSize(btScalar(5.f));
-
-
-
+	//bridge
+	  mat.loadIdentity();
+	  mat.translate(-5, 4, 1);
+	  mesh_instance* mesh1 = app_scene->add_shape(mat, new mesh_box(vec3(4.2f, 0.1f, 2)), yellow, true);
+	  btRigidBody *rb1 = mesh1->get_node()->get_rigid_body();
 
 	  mat.loadIdentity();
-	  mat.translate(8, 0, 0);
-	  mat.rotateX90();
-	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.8f, 3.0f)), blue, true);
+	  mat.translate(5, 4, 1);
+	  mesh_instance* mesh2 = app_scene->add_shape(mat, new mesh_box(vec3(4.2f, 0.1f, 2)), yellow, true);
+	  btRigidBody *rb2 = mesh2->get_node()->get_rigid_body();
 
-	  mat.loadIdentity();
-	  mat.translate(8, 0, 4);
-	  mat.rotateX90();
-	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.8f, 3.0f)), blue, true);
-
-	  mat.loadIdentity();
-	  mat.translate(-8, 0, 0);
-	  mat.rotateX90();
-	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.8f, 3.0f)), blue, true);
-
-	  mat.loadIdentity();
-	  mat.translate(-8, 0, 4);
-	  mat.rotateX90();
-	  app_scene->add_shape(mat, new mesh_cylinder(zcylinder(vec3(0, 0, 0), 0.8f, 3.0f)), blue, true);
-
-	  
       // ground
       mat.loadIdentity();
-      mat.translate(0, -1, 0);
-      app_scene->add_shape(mat, new mesh_box(vec3(200, 1, 200)), green, false);
+      mat.translate(0, -3, 0);
+	  mesh_instance* meshC=app_scene->add_shape(mat, new mesh_box(vec3(200, 1, 200)), green, false);
+	  btRigidBody *rbC = meshC->get_node()->get_rigid_body();
+
+	  //constraints
+	 btHingeConstraint*hinge12;
+	 btVector3 axisA(1.0f, 0.0f, 0.0f);
+	 btVector3 axisB(1.0f, 0.0f, 0.0f);
+	 btVector3 pivot1(-5.0f, 0.0f, 0.0f);
+	 btVector3 pivot2(5.0f, 0.0f, 0.0f);
+	 hinge12 = new btHingeConstraint(*rb1, *rb2,pivot1,pivot2, axisA, axisB);
+	 hinge12->setLimit(-SIMD_PI , SIMD_PI );
+	 app_scene->get_world()->addConstraint(hinge12, true);
+
+	 btHingeConstraint*hinge1B;
+	 btVector3 axis1B(1.0f, 0.0f, 0.0f);
+	 btVector3 axis1(1.0f, 0.0f, 0.0f);
+	 btVector3 pivotB(15.0f, 0.0f, 0.0f);
+	 btVector3 pivot11(5.0f, 0.0f, 0.0f);
+	 hinge1B = new btHingeConstraint(*rbB, *rb1, pivotB, pivot11, axis1B, axis1);
+	 hinge1B->setLimit(-SIMD_PI, SIMD_PI);
+	 app_scene->get_world()->addConstraint(hinge1B, true);
+
+	 btHingeConstraint*hinge2A;
+	 btVector3 axis2A(1.0f, 0.0f, 0.0f);
+	 btVector3 axis2(1.0f, 0.0f, 0.0f);
+	 btVector3 pivot2A(5.0f, 0.0f, 0.0f);
+	 btVector3 pivot22(15.0f, 0.0f, 0.0f);
+	 hinge2A = new btHingeConstraint(*rbA, *rb2, pivot2A, pivot22, axis2A, axis2);
+	 hinge2A->setLimit(-SIMD_PI, SIMD_PI);
+	 app_scene->get_world()->addConstraint(hinge2A, true);
+
+
+	 mat.loadIdentity();
+	 mat.translate(-14, 6, 1);
+	 mesh_instance* meshF = app_scene->add_shape(mat, new mesh_sphere(vec3(2, 2, 2), 2), blue, true);
+	 btRigidBody *rbF = meshF->get_node()->get_rigid_body();
+
+
+
+	 //btTransform frameInA, frameInB;
+	 //frameInA = btTransform::getIdentity();
+	 //frameInA.setOrigin(btVector3(btScalar(10.), btScalar(10.), btScalar(0.)));
+	 //frameInB = btTransform::getIdentity();
+	 //frameInB.setOrigin(btVector3(btScalar(10.), btScalar(10.), btScalar(0.)));
+
+	 //btGeneric6DofSpringConstraint* pGen6DOFSpring = new btGeneric6DofSpringConstraint(*rbF, *rbB, frameInA, frameInB, true);
+	 //pGen6DOFSpring->setLinearUpperLimit(btVector3(5., 0., 0.));
+	 //pGen6DOFSpring->setLinearLowerLimit(btVector3(-5., 0., 0.));
+
+	 //pGen6DOFSpring->setAngularLowerLimit(btVector3(0.f, 0.f, -1.5f));
+	 //pGen6DOFSpring->setAngularUpperLimit(btVector3(0.f, 0.f, 1.5f));
+
+	 //app_scene->get_world()->addConstraint(pGen6DOFSpring, true);
+	 //pGen6DOFSpring->setDbgDrawSize(btScalar(5.f));
+
+	 //pGen6DOFSpring->enableSpring(3, true);
+	 //pGen6DOFSpring->setStiffness(0, 3.5f);
+	 //pGen6DOFSpring->setDamping(0, 0.5f);
+	 //pGen6DOFSpring->enableSpring(5, true);
+	 //pGen6DOFSpring->setStiffness(5, 3.5f);
+	 //pGen6DOFSpring->setDamping(0, 0.3f);
+	 //pGen6DOFSpring->setEquilibriumPoint();
+
+
     }
 
+	
 
     /// this is called to draw the world
     void draw_world(int x, int y, int w, int h) {
       int vx = 0, vy = 0;
       get_viewport_size(vx, vy);
       app_scene->begin_render(vx, vy);
-
+	 
       // update matrices. assume 30 fps.
       app_scene->update(1.0f/30);
 
