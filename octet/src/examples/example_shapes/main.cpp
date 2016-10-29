@@ -22,6 +22,7 @@ int main(int argc, char **argv) {
   // our application.
   octet::example_shapes app(argc, argv);
   app.init();
+  
 
   // open windows
   octet::app::run_all_apps();
