@@ -48,14 +48,36 @@ namespace octet {
 
 	//bridge
 	  mat.loadIdentity();
-	  mat.translate(-5, 4, 1);
-	  mesh_instance* mesh1 = app_scene->add_shape(mat, new mesh_box(vec3(4.2f, 0.1f, 2)), red, true);
-	  btRigidBody *rb1 = mesh1->get_node()->get_rigid_body();
+	  mat.translate(-7, 2.2f, 1);
+	  mat.rotate(15.0f, 0, 0, 1);
+	  mesh_instance* mesh1 = app_scene->add_shape(mat, new mesh_box(vec3(1.2f, 0.1f, 3)), red, false);
+	  btRigidBody *plank1 = mesh1->get_node()->get_rigid_body();
+
+	  mat.loadIdentity();
+	  mat.translate(-4, 4, 1);
+	  mesh_instance* mesh2 = app_scene->add_shape(mat, new mesh_box(vec3(1.2f, 0.1f, 3)), yellow, true);
+	  btRigidBody *plank2 = mesh2->get_node()->get_rigid_body();
+
+	  mat.loadIdentity();
+	  mat.translate(-1, 4, 1);
+	  mesh_instance* mesh3 = app_scene->add_shape(mat, new mesh_box(vec3(1.2f, 0.1f, 3)), yellow, true);
+	  btRigidBody *plank3 = mesh3->get_node()->get_rigid_body();
+
+	  mat.loadIdentity();
+	  mat.translate(2, 4, 1);
+	  mesh_instance* mesh4 = app_scene->add_shape(mat, new mesh_box(vec3(1.2f, 0.1f, 3)), yellow, true);
+	  btRigidBody *plank4 = mesh4->get_node()->get_rigid_body();
 
 	  mat.loadIdentity();
 	  mat.translate(5, 4, 1);
-	  mesh_instance* mesh2 = app_scene->add_shape(mat, new mesh_box(vec3(4.2f, 0.1f, 2)), yellow, true);
-	  btRigidBody *rb2 = mesh2->get_node()->get_rigid_body();
+	  mesh_instance* mesh5 = app_scene->add_shape(mat, new mesh_box(vec3(1.2f, 0.1f, 3)), yellow, true);
+	  btRigidBody *plank5 = mesh5->get_node()->get_rigid_body();
+
+	  mat.loadIdentity();
+	  mat.translate(8, 2.2f, 1);
+	  mat.rotate(-15.0f, 0, 0, 1);
+	  mesh_instance* mesh6 = app_scene->add_shape(mat, new mesh_box(vec3(1.2f, 0.1f, 3)), red, false);
+	  btRigidBody *plank6 = mesh6->get_node()->get_rigid_body();
 
       // ground
       mat.loadIdentity();
@@ -63,41 +85,39 @@ namespace octet {
 	  mesh_instance* meshC=app_scene->add_shape(mat, new mesh_box(vec3(200, 1, 200)), green, false);
 	  btRigidBody *rbC = meshC->get_node()->get_rigid_body();
 
-	  //constraints
-	/* btHingeConstraint*hinge12;
-	 btVector3 axisA(1.0f, 0.0f, 0.0f);
-	 btVector3 axisB(1.0f, 0.0f, 0.0f);
-	 btVector3 pivot1(10.0f, 0.0f, 0.0f);
-	 btVector3 pivot2(7.0f, 0.0f, 0.0f);
-	 hinge12 = new btHingeConstraint(*rb1, *rb2,pivot1,pivot2, axisA, axisB);
-	 hinge12->setLimit(-SIMD_PI , SIMD_PI );
-	 app_scene->get_world()->addConstraint(hinge12, true);*/
+///////////////////////////////////////////////
 
-	 btHingeConstraint*hinge1B;
-	 btVector3 axis1B(1.0f, 0.0f, 0.0f);
-	 btVector3 axis1(1.0f, 0.0f, 0.0f);
-	 btVector3 pivotB(15.0f, 0.0f, 0.0f);
-	 btVector3 pivot11(5.0f, 0.0f, 0.0f);
-	 hinge1B = new btHingeConstraint(*rbB, *rb1, pivotB, pivot11, axis1B, axis1);
-	 hinge1B->setLimit(-SIMD_PI, SIMD_PI);
-	 app_scene->get_world()->addConstraint(hinge1B, true);
+	  btPoint2PointConstraint* leftSpring = new btPoint2PointConstraint(*plank1, *plank2, btVector3(1.5f, 1.5f, 0), btVector3(-1.5f, 2.0f, 0));
+	  app_scene->get_world()->addConstraint(leftSpring);
 
-	 btHingeConstraint*hinge2A;
-	 btVector3 axis2A(1.0f, 0.0f, 0.0f);
-	 btVector3 axis2(1.0f, 0.0f, 0.0f);
-	 btVector3 pivot2A(5.0f, 0.0f, 0.0f);
-	 btVector3 pivot22(15.0f, 0.0f, 0.0f);
-	 hinge2A = new btHingeConstraint(*rbA, *rb2, pivot2A, pivot22, axis2A, axis2);
-	 hinge2A->setLimit(-SIMD_PI, SIMD_PI);
-	 app_scene->get_world()->addConstraint(hinge2A, true);
+	  btPoint2PointConstraint* rightSpring = new btPoint2PointConstraint(*plank6, *plank5, btVector3(-1.5f, 1.5f, 0), btVector3(1.5f, 2.0f, 0));
+	  app_scene->get_world()->addConstraint(rightSpring);
+
+	  btPoint2PointConstraint* leftSpring1 = new btPoint2PointConstraint(*plank2, *plank3, btVector3(1.5f, 1.0f, 0.0f), btVector3(-1.5f, 1.0f, 0.0f));
+	  app_scene->get_world()->addConstraint(leftSpring1);
+
+	  btPoint2PointConstraint* rightSpring1 = new btPoint2PointConstraint(*plank5, *plank4, btVector3(-1.5f, 1.0f, 0), btVector3(1.5f, 1.0f, 0));
+	  app_scene->get_world()->addConstraint(rightSpring1);
 
 
-	 //mat.loadIdentity();
-	 //mat.translate(-14, 6, 1);
-	 //mesh_instance* meshF = app_scene->add_shape(mat, new mesh_sphere(vec3(2, 2, 2), 2), blue, true);
-	 //btRigidBody *rbF = meshF->get_node()->get_rigid_body();
-
+	//  //constraints
 	
+	 //btHingeConstraint*hinge;
+	 //btVector3 axis2A(0.0f, 1.0f, 0.0f);
+	 //btVector3 axis2(0.0f, 1.0f, 0.0f);
+	 //btVector3 pivot2A(-1.5f, 0.0f, 0.0f);
+	 //btVector3 pivot22(1.5f, 0.0f, 0.0f);
+	 //hinge = new btHingeConstraint(*plank3, *plank4, pivot2A, pivot22, axis2A, axis2);
+	 //hinge->setLimit(-SIMD_PI, SIMD_PI);
+	 //app_scene->get_world()->addConstraint(hinge, true);
+
+
+	// //mat.loadIdentity();
+	// //mat.translate(-14, 6, 1);
+	// //mesh_instance* meshF = app_scene->add_shape(mat, new mesh_sphere(vec3(2, 2, 2), 2), blue, true);
+	// //btRigidBody *rbF = meshF->get_node()->get_rigid_body();
+
+	//
 
 
 	 btTransform frameInA, frameInB;
@@ -107,58 +127,33 @@ namespace octet {
 	 frameInB.setOrigin(btVector3(btScalar(0.), btScalar(0.), btScalar(0.)));
 
 	 btGeneric6DofSpringConstraint* pGen6DOFSpring;
-	 pGen6DOFSpring = new btGeneric6DofSpringConstraint(*rb1, *rbC, frameInA, frameInB, true);
-	 pGen6DOFSpring->setLinearUpperLimit(btVector3(0., 10., 0.));
-	 pGen6DOFSpring->setLinearLowerLimit(btVector3(0., -10., 0.));
-
-	 pGen6DOFSpring->setAngularLowerLimit(btVector3(0.f, -1.5f, 0.0f));
-	 pGen6DOFSpring->setAngularUpperLimit(btVector3(0.f, 1.5f, 0.0f));
+	 pGen6DOFSpring = new btGeneric6DofSpringConstraint(*plank3, *plank4, frameInA, frameInB, true);
+	 pGen6DOFSpring->setLinearUpperLimit(btVector3(3.0f, 0.01f, 0.01f));
+	 pGen6DOFSpring->setLinearLowerLimit(btVector3(3.0f, 0.01f, 0.01f));
+	 //disable rotations
+	 pGen6DOFSpring->setAngularLowerLimit(btVector3(0, 0, -0.1f));
+	 pGen6DOFSpring->setAngularUpperLimit(btVector3(0, 0,-0.1f));
 
 	 app_scene->get_world()->addConstraint(pGen6DOFSpring, true);
 	 pGen6DOFSpring->setDbgDrawSize(btScalar(5.f));
 
 	 pGen6DOFSpring->enableSpring(0, true);
 	 pGen6DOFSpring->setStiffness(0, 39.478f);
-	 pGen6DOFSpring->setDamping(0, 0.5f);
-	 //pGen6DOFSpring->enableSpring(0, true);
-	 //pGen6DOFSpring->setStiffness(0, 39.478f);
-	 //pGen6DOFSpring->setDamping(0, 0.5f);
+	 pGen6DOFSpring->setDamping(0, 0.0f);
+	 pGen6DOFSpring->enableSpring(0, true);
+	 pGen6DOFSpring->setStiffness(0, 39.478f);
+	 pGen6DOFSpring->setDamping(0, 0.0f);
 	 pGen6DOFSpring->setEquilibriumPoint();
 
-	 btTransform frameInD, frameInE;
-	 frameInD = btTransform::getIdentity();
-	 frameInD.setOrigin(btVector3(btScalar(0.), btScalar(0.), btScalar(0.)));
-	 frameInE = btTransform::getIdentity();
-	 frameInE.setOrigin(btVector3(btScalar(0.), btScalar(0.), btScalar(0.)));
-
-	 btGeneric6DofSpringConstraint* bGen6DOFSpring;
-	 bGen6DOFSpring = new btGeneric6DofSpringConstraint(*rb2, *rbC, frameInD, frameInE, true);
-	 bGen6DOFSpring->setLinearUpperLimit(btVector3(5., 0., 0.));
-	 bGen6DOFSpring->setLinearLowerLimit(btVector3(1., 0., 0.));
-
-	 bGen6DOFSpring->setAngularLowerLimit(btVector3(0.f, 0.f, 0.0f));
-	 bGen6DOFSpring->setAngularUpperLimit(btVector3(0.f, 0.f, 0.0f));
-
-	 app_scene->get_world()->addConstraint(bGen6DOFSpring, true);
-	 bGen6DOFSpring->setDbgDrawSize(btScalar(5.f));
-
-	 bGen6DOFSpring->enableSpring(0, true);
-	 bGen6DOFSpring->setStiffness(0, 39.478f);
-	 bGen6DOFSpring->setDamping(0, 0.5f);
-	 bGen6DOFSpring->enableSpring(0, true);
-	 bGen6DOFSpring->setStiffness(0, 39.478f);
-	 bGen6DOFSpring->setDamping(0, 0.5f);
-	 bGen6DOFSpring->setEquilibriumPoint();
-
-	
-	 ///////////////////////////////////////////////////////////////////////////////
-	 mat.loadIdentity();
-	 mat.translate(0, 6, 1);
-	 mesh_instance* meshF = app_scene->add_shape(mat, new mesh_sphere(vec3(2, 2, 2), 2), blue, true);
-	 btRigidBody *rbF = meshF->get_node()->get_rigid_body();
+	 
+	 //mat.loadIdentity();
+	 //mat.translate(0, 6, 1);
+	 //mesh_instance* meshF = app_scene->add_shape(mat, new mesh_sphere(vec3(2, 2, 2), 2), blue, true);
+	 //btRigidBody *rbF = meshF->get_node()->get_rigid_body();
 
 
     }
+	
 
 
 	
