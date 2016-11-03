@@ -14,6 +14,8 @@
 
 #include "example_shapes.h"
 
+#include <fstream>
+
 /// Create a box with octet
 int main(int argc, char **argv) {
   // set up the platform.

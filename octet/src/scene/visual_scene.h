@@ -334,10 +334,11 @@ namespace octet { namespace scene {
       #endif
       return result;
     }
-
+#ifdef OCTET_BULLET
 	btDiscreteDynamicsWorld* get_world() {
 		return world;
 	}
+#endif
 
     /// Serialization
     void visit(visitor &v) {
