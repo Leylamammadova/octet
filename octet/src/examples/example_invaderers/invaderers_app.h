@@ -20,10 +20,15 @@ namespace octet {
     int texture;
 
     bool enabled;
+
+
   public:
+	  bool invert = false;
+
     sprite() {
       texture = 0;
       enabled = true;
+	
     }
 
     void init(int _texture, float x, float y, float w, float h) {
@@ -68,6 +73,41 @@ namespace octet {
     
       glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     }
+	//added another shader
+	void render(invert_shader &shader, mat4t &cameraToWorld) {
+
+		if (!texture) return;
+
+		mat4t modelToProjection = mat4t::build_projection_matrix(modelToWorld, cameraToWorld);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture);
+
+		shader.render(modelToProjection, 0);
+
+		float vertices[] = {
+			-halfWidth, -halfHeight, 0,
+			halfWidth, -halfHeight, 0,
+			halfWidth,  halfHeight, 0,
+			-halfWidth,  halfHeight, 0,
+		};
+
+		glVertexAttribPointer(attribute_pos, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)vertices);
+		glEnableVertexAttribArray(attribute_pos);
+
+		static const float uvs[] = {
+			0,  0,
+			1,  0,
+			1,  1,
+			0,  1,
+		};
+
+		glVertexAttribPointer(attribute_uv, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)uvs);
+		glEnableVertexAttribArray(attribute_uv);
+
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	}
+
 
     void translate(float x, float y) {
       modelToWorld.translate(x, y, 0);
@@ -107,7 +147,7 @@ namespace octet {
     mat4t cameraToWorld;
 
     texture_shader texture_shader_;
-	
+	invert_shader invert_shader_;
 
 
     enum {
@@ -263,6 +303,7 @@ namespace octet {
 
 		// set up the shader
 		texture_shader_.init();
+		invert_shader_.init();
 
 		font_texture = resource_dict::get_texture_handle(GL_RGBA, "assets/big_0.gif");
 
@@ -292,6 +333,7 @@ namespace octet {
 				                 switch (readfile(i + j*num_cols)) {
 				                 case 'b':
                                  sprites[wall_sprites + i + j*num_cols].init(brick, x, y, brick_size, brick_size);
+								 sprites[wall_sprites + i + j*num_cols].invert = true;
 					             break;
 				                        case '.':
                                         break;
@@ -306,13 +348,13 @@ namespace octet {
 		
 
 			
-			m83 = resource_dict::get_sound_handle(AL_FORMAT_MONO16, "assets/invaderers/m83.wav");
+		/*	m83 = resource_dict::get_sound_handle(AL_FORMAT_MONO16, "assets/invaderers/m83.wav");
 			cur_source = 0;
 			alGenSources(num_sound_sources, sources);
 			ALuint source = get_sound_source();
 			alSourcei(source, AL_BUFFER, m83);
 			alSourcePlay(source);
-		
+		*/
 
 			num_lives = 1;
 			game_over = false;
@@ -330,6 +372,7 @@ namespace octet {
 	
 	void moving_borders() {
 
+
 		// made the bottom border follow the player
 		GLuint grey = resource_dict::get_texture_handle(GL_RGB, "#7a7a7a");
 		float m = -5 + frames / 22.0f;
@@ -345,7 +388,7 @@ namespace octet {
 		sprites[first_border_sprite + 2].init(wall, -7, frames / 20.0f, 8, 10);
 		sprites[first_border_sprite + 3].init(wall, 7, frames / 20.0f, 8, 10);
 
-
+		
 		if (sprites[ship_sprite].collides_with(sprites[you_won_sprite])) {
 			game_over = true;
 		}
@@ -401,7 +444,12 @@ namespace octet {
 
 	  
       for (int i = 0; i != num_sprites; ++i) {
-        sprites[i].render(texture_shader_, cameraToWorld);
+		  if (sprites[i].invert) {
+			  sprites[i].render(invert_shader_, cameraToWorld);
+		  }
+		  else {
+			  sprites[i].render(texture_shader_, cameraToWorld);
+		  }
       }
 
       char score_text[32];

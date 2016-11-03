@@ -43,7 +43,8 @@ namespace octet { namespace shaders {
 	  uniform sampler2D texture;
 		void main() {
 
-			gl_FragColor = texture2D(sampler, uv_);
+		     gl_FragColor = texture2D(sampler, uv_);
+			//gl_FragColor.rgb *= vec3(2.0, 2.0, 2.0);//this values
 
 			
 		}
