@@ -19,7 +19,7 @@ namespace octet {
     }
 	
 
-    /// this is called once OpenGL is initialized
+  
 	void app_init() {
 		app_scene = new visual_scene();
 		app_scene->create_default_camera_and_lights();
@@ -81,18 +81,22 @@ namespace octet {
 		btPoint2PointConstraint* rightSpring1 = new btPoint2PointConstraint(*plank5, *plank4, btVector3(-1.5f, 1.0f, 0), btVector3(1.5f, 1.0f, 0));
 		app_scene->get_world()->addConstraint(rightSpring1);
 
-
-	/*	 btHingeConstraint*hinge;
-		 btVector3 axisA(0.0f, 1.0f, 0.0f);
-		 btVector3 axisB(0.0f, 1.0f, 0.0f);
-		 btVector3 pivotA(5.0f, 0.0f, 0.0f);
-		 btVector3 pivotB(1.0f, 2.0f, 0.0f);
+		//hinge constraint
+	     mat.loadIdentity();
+		 mat.translate(-8, 5, 0);
+		 mesh_instance* meshF = app_scene->add_shape(mat, new mesh_sphere(vec3(1, 1, 1), 1), blue, true);
+		 btRigidBody *rbF = meshF->get_node()->get_rigid_body();
+	     btHingeConstraint*hinge;
+		 btVector3 axisA(1.0f, 0.0f, 0.0f);
+		 btVector3 axisB(1.0f, 0.0f, 0.0f);
+		 btVector3 pivotA(3.0f, -1.0f, 0.0f);
+		 btVector3 pivotB(1.0f, 1.0f, 0.0f);
 		 hinge = new btHingeConstraint(*rbF, *plank6, pivotA, pivotB, axisA, axisB);
 		 hinge->setLimit(-SIMD_PI*0.5f, SIMD_PI*0.5f);
 		 app_scene->get_world()->addConstraint(hinge, true);
-*/
+
 	
-		 //spring
+		 //spring constraint
 		btTransform frameInA, frameInB;
 		frameInA = btTransform::getIdentity();
 		frameInA.setOrigin(btVector3(btScalar(0.), btScalar(0.), btScalar(0.)));
@@ -134,16 +138,8 @@ namespace octet {
 		mesh_instance* meshC = app_scene->add_shape(mat, new mesh_box(vec3(200, 1, 200)), green, false);
 		btRigidBody *rbC = meshC->get_node()->get_rigid_body();
 
-		 mat.loadIdentity();
-		 mat.translate(-10, 6, 0);
-		 mesh_instance* meshF = app_scene->add_shape(mat, new mesh_sphere(vec3(2, 2, 2), 2), blue, true);
-		 btRigidBody *rbF = meshF->get_node()->get_rigid_body();
-		 
-
 	}
 
-
-	
 
     void draw_world(int x, int y, int w, int h) {
       	
