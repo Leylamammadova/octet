@@ -1,25 +1,65 @@
-# octet
+#Leyla Mammadova
+#Intro to Game Programming: Assignment 1
+#Objectives:
+•	Hack the example_invaderers and change the game dynamics
 
-Octet is a framework for teaching OpenGL and the rudiments of game programming such
-as Geometry construction, Shaders, Matrices, Rigid body Physics and Fluid dynamics.
+•	Setting up objects by setting a CSV or similar txt file
 
-It has a number of examples in the src/examples directory.
+•	Write your own fragment shader
 
-To use with visual studio, fork this repository into your own account and then
-"Clone Into Desktop" using the GitHub tool and open one of the .sln files in src/examples.
+#Ghost Blocks!
 
-There is a python script for generating your own projects from a template.
+#YouTube link:
 
-From the octet directory run:
+https://www.youtube.com/watch?v=kxJkdnniKGo
 
-packaging\make_example.py my_example
+#Gameplay:
+Help this little ghost pass through the obstacles! Don’t let yourself stuck! As soon as you won’t be seen by camera the game is OVER.
 
-To create your own project in src/examples
+#Controls:
+Use WASD to move the ghost. 
 
-Examples should also work with Xcode, although testing is a lot less thorough. If it does not work, send
-me a pull request with fixes, please...
+Press “P” to pause the game. Press “P” again to proceed the game.
 
-Octet is a bit unusual in that it does not use external libraries such as libjpeg or zlib.
-These are implemented in source form in the framework so that you can understand the code.
-The source of most academic libraries is almost unreadble, so we aim to help your understanding
-of coding codecs such as GIF, JPEG, ZIP and so on.
+Press LEFT SHIFT to restart the game.
+
+#General changes:
+What I did first it changed the whole concept of the game. Now there is no invaders, there is only one player(ghost). 
+Before that score was counting your hits on invaders, now score is showing how much time(seconds) you stayed alive. To implement that score is counting frames. 
+
+The player before that could only go from left to right, I’ve added WASD key with ASCII values, so now player can move in any direction. Also, player collides with borders and obstacles. 
+
+To make a sense of that the borders are going down actually the camera with borders is going up. The obstacles are represented by reading a txt file. To set up the obstacles instead of adding each one separately, I’ve use a txt file (“borders.txt”).
+ Added game rules in the beginning so player would understand the objectives of the game.
+ 
+There should be a failure in the game so if you stuck and you are lost from the camera ghost collides with a bottom border which you don’t see. 
+
+
+#Fragment Shader:
+I’ve added an invert_shader to the octet and another render method. 
+This shader colour the sprites to invert colour. But since I didn’t want it to apply to every sprite I created a Boolean function invert that allowed me to change only selected sprites. 
+
+
+#Sound and images:
+Changed gifs so it would fit to the concept of the game. I do now own any of this pictures.
+Added creepy version of music by M83 “Midnight City”.
+
+#Problem solving:
+
+Problem: ship didn’t collide with all obstacles
+
+Solution: added for loop for collision
+
+Problem: render function was for texture_shader
+
+Solution: added another render function for invert_shader and Boolean function
+
+Problem: camera didn’t move up
+
+Solution: added camera function in to simulate function so it would be called more than once
+
+Problem : reading the whole file (not only 1 line) and convert string to char
+
+Solution :  http://stackoverflow.com/questions/13035674/how-to-read-line-by-line-or-a-whole-text-file-at-once  
+
+http://www.cplusplus.com/forum/general/100714/
