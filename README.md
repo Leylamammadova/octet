@@ -39,12 +39,6 @@ There should be a failure in the game so if you stuck and you are lost from the 
 I’ve added an invert_shader to the octet and another render method. 
 This shader colour the sprites to invert colour. But since I didn’t want it to apply to every sprite I created a Boolean function invert that allowed me to change only selected sprites. 
 
-<p align="center">
-  <img src="https://postimg.org/image/5foud0jeb/][img]https://s21.postimg.org/5foud0jeb/invertshader.jpg"/>
-  <img src="https://postimg.org/image/ggjzi1bn7/][img]https://s21.postimg.org/ggjzi1bn7/shader.jpg"/>
-</p>
-
-
 
 #Sound and images:
 Changed gifs so it would fit to the concept of the game. I do now own any of this pictures.
