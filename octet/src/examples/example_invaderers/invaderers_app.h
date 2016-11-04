@@ -23,6 +23,7 @@ namespace octet {
 
 
   public:
+	  //easy to render specific sprites
 	  bool invert = false;
 
     sprite() {
@@ -73,7 +74,7 @@ namespace octet {
     
       glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     }
-	//added another shader
+	//for rendering another shader
 	void render(invert_shader &shader, mat4t &cameraToWorld) {
 
 		if (!texture) return;
@@ -151,7 +152,7 @@ namespace octet {
 
 
     enum {
-      num_sound_sources = 40,
+      num_sound_sources = 8,
 	  num_rows = 108,
       num_cols = 16,
       rules_sprite,
@@ -166,7 +167,6 @@ namespace octet {
       last_invaderer_sprite = first_invaderer_sprite + num_invaderers - 1,
 	  first_border_sprite,
       last_border_sprite = first_border_sprite + num_borders - 1,
-
       num_sprites,
 
     };
@@ -319,8 +319,7 @@ namespace octet {
    
 		GLuint brick = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/brick.gif");
 		
-    	
-	
+
 		//big thanks to Robert for explaining me this
 
 		    for (int j = 0; j != num_rows; ++j) {
@@ -347,14 +346,14 @@ namespace octet {
 
 		
 
-			
-		/*	m83 = resource_dict::get_sound_handle(AL_FORMAT_MONO16, "assets/invaderers/m83.wav");
+		
+		    m83 = resource_dict::get_sound_handle(AL_FORMAT_MONO16, "assets/invaderers/m83.wav");
 			cur_source = 0;
 			alGenSources(num_sound_sources, sources);
 			ALuint source = get_sound_source();
 			alSourcei(source, AL_BUFFER, m83);
 			alSourcePlay(source);
-		*/
+		
 
 			num_lives = 1;
 			game_over = false;
