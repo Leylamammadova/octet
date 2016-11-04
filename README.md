@@ -29,7 +29,7 @@ Before that score was counting your hits on invaders, now score is showing how m
 
 The player before that could only go from left to right, I’ve added WASD key with ASCII values, so now player can move in any direction. Also, player collides with borders and obstacles. 
 
-To make a sense of that the borders are going down actually the camera with borders is going up. The obstacles are represented by reading a txt file. To set up the obstacles instead of adding each one separately, I’ve use a txt file (“borders.txt”).
+To make a sense of that the borders are going down actually the camera with borders are going up. The obstacles are represented by reading a txt file. To set up the obstacles instead of adding each one separately, I’ve use a txt file (“borders.txt”).
  Added game rules in the beginning so player would understand the objectives of the game.
  
 There should be a failure in the game so if you stuck and you are lost from the camera ghost collides with a bottom border which you don’t see. 
@@ -37,11 +37,18 @@ There should be a failure in the game so if you stuck and you are lost from the 
 
 #Fragment Shader:
 I’ve added an invert_shader to the octet and another render method. 
-This shader colour the sprites to invert colour. But since I didn’t want it to apply to every sprite I created a Boolean function invert that allowed me to change only selected sprites. 
+This shader colour the sprites to invert colour. But since I didn’t want it to apply to every sprite I created a boolean function invert that allowed me to change only selected sprites. 
+
+example of applying this shader to all sprites and only for blocks
+
+<p align="center">
+  <img src="https://github.com/Leylamammadova/octet/blob/master/invertshader.jpg?raw=true" width="350"/>
+  <img src="https://github.com/Leylamammadova/octet/blob/master/shader.jpg?raw=true" width="350"/>
+</p>
 
 
 #Sound and images:
-Changed gifs so it would fit to the concept of the game. I do now own any of this pictures.
+Changed gifs so thay would fit to the concept of the game. I do now own any of this pictures.
 Added creepy version of music by M83 “Midnight City”.
 
 #Problem solving:
@@ -52,7 +59,7 @@ Solution: added for loop for collision
 
 Problem: render function was for texture_shader
 
-Solution: added another render function for invert_shader and Boolean function
+Solution: added another render function for invert_shader and boolean function
 
 Problem: camera didn’t move up
 
