@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<lsystem>
+<angle>20.0</angle>
+<iterations>7</iterations>
+<axiom1>X</axiom1>
+<axiom2>F</axiom2>
+<rule1>F[+X]F[-X]+X</rule1>
+<rule2>FF</rule2>
+</lsystem>

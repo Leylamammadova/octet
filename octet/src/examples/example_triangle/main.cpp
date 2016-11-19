@@ -8,7 +8,8 @@
 //
 
 #include "../../octet.h"
-
+#include <fstream>
+#include <string>
 #include "example_triangle.h"
 
 /// Create a box with octet

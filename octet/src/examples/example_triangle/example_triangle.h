@@ -21,12 +21,11 @@ namespace octet {
 
       glGenBuffers(1, &vertices);
       glBindBuffer(GL_ARRAY_BUFFER, vertices);
-
+      
       // corners (vertices) of the triangle
       static const float vertex_data[] = {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f,
+        0, 5, 0.0f,
+        0, -5, 0.0f,
       };
 
       glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW);
@@ -42,7 +41,7 @@ namespace octet {
       glViewport(0, 0, vx, vy);
 
       /// clear the background and the depth buffer
-      glClearColor(0, 0, 1, 1);
+      glClearColor(0, 0, 0, 1);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       /// allow Z buffer depth testing (closer objects are always drawn in front of far ones)

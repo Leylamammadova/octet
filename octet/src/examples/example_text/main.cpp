@@ -8,8 +8,14 @@
 //
 
 #include "../../octet.h"
-
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
 #include "example_text.h"
+#include "tinyxml.h"
+
+
 
 /// Create a box with octet
 int main(int argc, char **argv) {

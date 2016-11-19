@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<lsystem>
+<angle>20.0</angle>
+<iterations>5</iterations>
+<axiom>F</axiom>
+<rule1>F[+F]F[-F][F]</rule1>
+</lsystem>

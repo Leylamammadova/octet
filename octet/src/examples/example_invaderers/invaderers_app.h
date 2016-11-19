@@ -322,23 +322,23 @@ namespace octet {
 
 		//big thanks to Robert for explaining me this
 
-		    for (int j = 0; j != num_rows; ++j) {
+		for (int j = 0; j != num_rows; ++j) {
 			for (int i = 0; i != num_cols; ++i) {
 			
 				float brick_size = 0.5f;
 				float x = ((float)i - num_cols * 0.5f) * brick_size;
 				float y = 55.50f - ((float)j * brick_size);
 				
-				                 switch (readfile(i + j*num_cols)) {
-				                 case 'b':
-                                 sprites[wall_sprites + i + j*num_cols].init(brick, x, y, brick_size, brick_size);
-								 sprites[wall_sprites + i + j*num_cols].invert = true;
-					             break;
-				                        case '.':
-                                        break;
+				switch (readfile(i + j*num_cols)) {
+				  case 'b':
+            sprites[wall_sprites + i + j*num_cols].init(brick, x, y, brick_size, brick_size);
+						sprites[wall_sprites + i + j*num_cols].invert = true;
+	          break;
+				  case '.':
+            break;
 	
-				                       default:
-					                   std::cout << "not reading file";
+				  default:
+    				std::cout << "not reading file";
 				}
 			}
 			
