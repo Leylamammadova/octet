@@ -1,47 +1,84 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-// (C) Andy Thomason 2012-2014
-//
-// Modular Framework for OpenGLES2 rendering on multiple platforms.
-//
+
+
+
+
 namespace octet {
-  /// Scene containing a box with octet.
-  class example_box : public app {
+  class branch {
+    mat4t modelToWorld;
+    float branchLength;
+    vec4 colour;
+
+    public: 
+      void init(mat4t mat, vec4 branchColour, float length) {
+        modelToWorld = mat;
+        colour= branchColour;
+        branchLength= length;
+    }
+    //old school rendering for the branch
+      void render(color_shader&shader, mat4t &cameraToWorld) {
+        mat4t modelToProjection = mat4t::build_projection_matrix(modelToWorld, cameraToWorld);
+
+        shader.render(modelToProjection, colour);
+
+        float points[] = {
+          0, 0, 0,
+          0, branchLength, 0,
+        };
+
+        glVertexAttribPointer(attribute_pos, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)points);
+        glEnableVertexAttribArray(attribute_pos);
+
+        glDrawArrays(GL_LINES, 0, 2);
+    }
+  };
+  class lsystems : public app {
     // scene for drawing box
-    ref<visual_scene> app_scene;
+
+    mat4t modelToWorld;
+    mat4t cameraToWorld;
+
+    color_shader color_shader_;
+
+    float branchLength;
+
+
   public:
     /// this is called when we construct the class before everything is initialised.
-    example_box(int argc, char **argv) : app(argc, argv) {
+    lsystems(int argc, char **argv) : app(argc, argv) {
     }
+    dynarray<branch>branches;
 
     /// this is called once OpenGL is initialized
     void app_init() {
-      app_scene =  new visual_scene();
-      app_scene->create_default_camera_and_lights();
+    //initilize the shader
+    color_shader_.init();
 
-      material *red = new material(vec4(1, 0, 0, 1));
-      mesh *box = new mesh_box(vec3(4));
-      scene_node *node = new scene_node();
-      app_scene->add_child(node);
-      app_scene->add_mesh_instance(new mesh_instance(node, box, red));
+    branchLength= 4;
+
+
     }
+    void hot_keys() {
 
+    }
+    //set the camera
+    void camera() {
+      cameraToWorld.loadIdentity();
+      cameraToWorld.translate(0, 200, 200);
+    }
     /// this is called to draw the world
+
     void draw_world(int x, int y, int w, int h) {
-      int vx = 0, vy = 0;
-      get_viewport_size(vx, vy);
-      app_scene->begin_render(vx, vy);
+      
+      for (int i = 0; i < branches.size(); i++) {
+        branches[i].render(color_shader_, cameraToWorld);
+      }
 
-      // update matrices. assume 30 fps.
-      app_scene->update(1.0f/30);
+    camera();
+    hot_keys();
+    glViewport(x, y, w, h);
+    glClearColor(0, 0, 0.3f, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      // draw the scene
-      app_scene->render((float)vx / vy);
-
-      // tumble the box  (there is only one mesh instance)
-      scene_node *node = app_scene->get_mesh_instance(0)->get_node();
-      node->rotate(1, vec3(1, 0, 0));
-      node->rotate(1, vec3(0, 1, 0));
     }
   };
 }

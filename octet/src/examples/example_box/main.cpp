@@ -8,7 +8,7 @@
 //
 
 #include "../../octet.h"
-
+#include <fstream>
 #include "example_box.h"
 
 /// Create a box with octet
@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
   octet::app::init_all(argc, argv);
 
   // our application.
-  octet::example_box app(argc, argv);
+  octet::lsystems app(argc, argv);
   app.init();
 
   // open windows

@@ -68,25 +68,7 @@ namespace octet {
    //   app_scene->add_mesh_instance(new mesh_instance(node, box, red));
 
    // }
-    //taken from tinyxml tutorials
-   /* void loadxml() {
-      TiXmlDocument doc();
-    }*/
-  
-    //void dump_to_stdout(char* pFilename )
-    //{
-    //  TiXmlDocument doc(pFilename);
-    //  bool loadOkay = doc.LoadFile();
-    //  if (loadOkay)
-    //  {
-    //    printf("\n%s:\n", pFilename);
-    //    dump_to_stdout( pFilename); // defined later in the tutorial
-    //  }
-    //  else
-    //  {
-    //    printf("Failed to load file \"%s\"\n", pFilename);
-    //  }
-    //}
+
 
     void hotkey() {
     //ad hot keys of changing parameters
@@ -115,6 +97,8 @@ namespace octet {
       if (is_key_going_down(key_f3)) {
         TiXmlDocument doc("tree1.xml");
         doc.LoadFile();
+
+ 
         bool loadOkay = doc.LoadFile();
         if (loadOkay) {
           printf("\n%s:\n", "tree3.xml");
