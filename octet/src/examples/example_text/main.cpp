@@ -14,6 +14,7 @@
 #include <vector>
 #include "example_text.h"
 #include "tinyxml.h"
+#include <math.h>
 
 
 
