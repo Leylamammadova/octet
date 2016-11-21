@@ -9,6 +9,9 @@
 
 #include "../../octet.h"
 #include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
 #include "example_box.h"
 
 /// Create a box with octet
