@@ -38,6 +38,10 @@ namespace octet {
     mat4t modelToWorld;
     mat4t cameraToWorld;
     std::vector<branch>branches;
+    std::vector<mat4t>stack; //for pushing and poping stacks [ and ]
+    std::vector<char> reading;
+
+    
     
 
 
@@ -46,8 +50,7 @@ namespace octet {
     float branchLength; //size of branch
     int iterations;//number of iterations
     float angle; //angle for trees
-    std::string beginIter;//begin iterations 
-    std::string endIter;//end iterations
+   
   
 
   public:
@@ -67,18 +70,32 @@ namespace octet {
     void readfile(std::string filename) {
       std::ifstream myFile;
       std::string line;
+    
+   
+      
       myFile.open(filename);
       if(myFile.is_open()){
       while (std::getline(myFile, line)) {
+ 
       std:: cout<<"reading file";
         }
       }else std::cout<<"not open file";
+     
     }
 
+    void push_stack() {
+      stack.push_back(modelToWorld);
+    }
+
+    void pop_stack() {
+    modelToWorld=stack[stack.size()-1];
+    stack.pop_back();
+
+    }
     void app_init() {
     //initilize the shader
     color_shader_.init();
-    branchLength = 5;
+    branchLength = 4;
     treeColour = vec4(0,1,0,1);
     
     makestick();
@@ -89,34 +106,35 @@ namespace octet {
       
       modelToWorld.loadIdentity();
       branch stick;
-      stick.init(modelToWorld, (0, 1, 0, 1), branchLength);
+      stick.init(modelToWorld, treeColour, branchLength);
       branches.push_back(stick);
     }
   
   //using turtle graphics
     void generateTree() {
 
-     /* for (int i = 0; i <  ; i++) {
-        switch ([i])
-        {
-        case 'F': makestick();
-          break;
+   //   for (int i = 0; i <  ; i++) {
+   //     switch// ()
+   //     {
+   //     case 'F': makestick();
+   //       break;
 
-        case '+': modelToWorld.rotateZ(angle);
-          break;
+   //     case '+': modelToWorld.rotateZ(angle);
+   //       break;
 
-        case '-': modelToWorld.rotateZ(-angle);
-          break;
+   //     case '-': modelToWorld.rotateZ(-angle);
+   //       break;
 
-        case '[': 
-          break;
+   //     case '[': push_stack();
+   //       break;
 
-        case ']':
-          break;
+   //     case ']': pop_stack();
+   //       break;
 
-        case 'X':
-          break;
-          }*/
+   //     case 'X': 
+   //       break;
+   //       }
+   //}
    }
   //hotkeys
     void hotkey() {
@@ -163,12 +181,11 @@ namespace octet {
     //set the camera
     void camera() {
       cameraToWorld.loadIdentity();
-      cameraToWorld.translate(0, 0, 20);
+      cameraToWorld.translate(0, 5.0f, 10.0f);
     }
     /// this is called to draw the world
 
     void draw_world(int x, int y, int w, int h) {
-     
      
     hotkey();
     camera();

@@ -14,6 +14,7 @@
 #include <vector>
 #include "example_box.h"
 
+
 /// Create a box with octet
 int main(int argc, char **argv) {
   // set up the platform.
