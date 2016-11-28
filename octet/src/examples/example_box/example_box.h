@@ -13,8 +13,7 @@ namespace octet {
     std::vector<branch>branches;
     std::vector<mat4t>stack; //for pushing and poping stacks [ and ]
     std::string curInput,curOutput,axiom;
-    //std::string constants = "[]+-";
-    
+
     color_shader color_shader_; //initilaze color shader
 
     float branchLength; //size of branch
@@ -22,17 +21,13 @@ namespace octet {
     float angle; //angle for trees
     
      struct rule {
-        char head;
-        std::string body;
+        char inChar;
+        std::string inString;
 
     };
     
     std::vector<rule>rules;
-    //std::vector<std::string>rules1;
-   // std::string rules;
-    
-
-
+ 
 
   public:
     
@@ -113,9 +108,9 @@ namespace octet {
       for (int j = 0; j < curInput.length(); j++) {
 
         for (int k = 0; k<rules.size(); k++) {
-          if (curInput[j] == rules[k].head)
+          if (curInput[j] == rules[k].inChar)
           {
-            curOutput.append(rules[k].body);
+            curOutput.append(rules[k].inString);
 
           }
         } 
