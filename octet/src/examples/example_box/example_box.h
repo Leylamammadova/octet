@@ -23,7 +23,6 @@ namespace octet {
      struct rule {
         char inChar;
         std::string inString;
-
     };
     
     std::vector<rule>rules;
@@ -41,18 +40,14 @@ namespace octet {
 
     void readfile(std::string filename) {
       std::ifstream myFile;
-      std::string line;
-      std::string id;
-
+     
       myFile.open(filename);
       if (myFile.is_open()) {
      
-  
-
       std::cout << "reading your file\n";
       
-        while (myFile >> iterations>> angle) {
-          std::cout <<iterations<<","<<angle <<std::endl;
+        while (myFile >> iterations>> angle>>axiom>>branchLength) {
+          std::cout <<iterations<<","<<angle <<","<<axiom<<","<<branchLength<< std::endl;
         }
       }
       else {
@@ -73,8 +68,6 @@ namespace octet {
     }
 
    
-
-   
     //push the current state
     void push_stack() {
       stack.push_back(modelToWorld);
@@ -85,7 +78,6 @@ namespace octet {
     stack.pop_back();
     
     }
-
 
     void makestick() {
       branch stick;
@@ -155,11 +147,7 @@ namespace octet {
       }
    }
 
- 
 
-  
-  //using turtle graphics
-   
   //hotkeys
     void hotkey() {
     
@@ -169,8 +157,6 @@ namespace octet {
       readfile("rule1.txt");
       branches.resize(0);
       rules.resize(0);
-      branchLength = 1.0f;
-      axiom = "F";
       rules = {
         { 'F',"F[+F]F[-F]F" },
         { '[',"[" },
@@ -188,9 +174,6 @@ namespace octet {
         readfile("rule2.txt");
        branches.resize(0);
        rules.resize(0);
-       branchLength = 4.0f;
-
-        axiom = "F";
         rules = {
           { 'F',"F[+F]F[-F][F]" },
           { '[',"[" },
@@ -208,8 +191,6 @@ namespace octet {
         readfile("rule3.txt");
         branches.resize(0);
         rules.resize(0);
-        branchLength = 4.0f;
-        axiom = "F";
         rules = {
           { 'F',"FF-[-F+F+F]+[+F-F-F]" },
           { '[',"[" },
@@ -226,8 +207,6 @@ namespace octet {
         readfile("rule4.txt");
         branches.resize(0);
         rules.resize(0);
-        branchLength = 1.0f;
-        axiom = "X";
         rules = {
           {'X',"F[+X]F[-X]+X"},
           { 'F',"FF" },
@@ -244,9 +223,7 @@ namespace octet {
      
         branches.resize(0);
         rules.resize(0);
-        branchLength = 1.0f;
         readfile("rule5.txt");
-        axiom = "X";
         rules = {
           {'X', "F[+X][-X]FX"},
           { 'F',"FF" },
@@ -264,8 +241,6 @@ namespace octet {
         readfile("rule6.txt");
         branches.resize(0);
         rules.resize(0);
-        branchLength=4.0f;
-        axiom = "X";
         rules = {
         {'X',"F-[[X]+X]+F[+FX]-X"},
           { 'F',"FF" },
@@ -283,8 +258,6 @@ namespace octet {
         readfile("rule7.txt");
         branches.resize(0);
         rules.resize(0);
-        branchLength = 4.0f;
-        axiom = "F+F+F+F";
         rules = {
           { 'F',"F+f-FF+F+FF+Ff+FF-f+FF-F-FF-Ff-FFF" },
           {'f',"ffffff"},
@@ -303,8 +276,6 @@ namespace octet {
         readfile("rule8.txt");
         branches.resize(0);
         rules.resize(0);
-        branchLength = 3.0f;
-        axiom = "-F";
         rules = {
           { 'F',"F+F-F-F+F" },
           { '[',"[" },
