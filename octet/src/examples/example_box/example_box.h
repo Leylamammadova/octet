@@ -44,40 +44,28 @@ namespace octet {
     vec4 treeColour;
     
 
-    //void readfile(std::string filename) {
-    //  std::ifstream myFile;
-    //  std::string line;
-    //  std::string id;
+    void readfile(std::string filename) {
+      std::ifstream myFile;
+      std::string line;
+      std::string id;
 
-    //  myFile.open(filename);
-    //  if (myFile.is_open()) {
-    // 
+      myFile.open(filename);
+      if (myFile.is_open()) {
+     
   
 
-    //  std::cout << "reading your file\n";
-    //  
-    //    while (myFile >> axiom >> rules>>iterations>> angle) {
-    //      std::cout << axiom << "," << rules<<","<<iterations<<","<<angle <<std::endl;
-
-    //      std::getline(myFile,axiom);
-    //      axiom1=axiom;
-
-    //      std::getline(myFile, rules);
-    //      rule2=rules;
-
-    //     
-    //     //rules1.push_back(line);
-
-    //    }
-
-
-    //  }
-    //  else {
-    //    std::cout << "not open file\n";
-    //  }
-    //   /*myFile.close();
-    //   std::cout<<"file closed\n";*/
-    //}
+      std::cout << "reading your file\n";
+      
+        while (myFile >> iterations>> angle) {
+          std::cout <<iterations<<","<<angle <<std::endl;
+        }
+      }
+      else {
+        std::cout << "not open file\n";
+      }
+       myFile.close();
+       std::cout<<"file closed\n";
+    }
     
  
 
@@ -85,10 +73,6 @@ namespace octet {
       //initilize the shader
       color_shader_.init();
       treeColour = vec4(0, 1, 0, 1);
- 
-     
-    // readfile("rule1.txt");
- 
       generateTree();
 
     }
@@ -187,7 +171,7 @@ namespace octet {
       if (is_key_going_down(key_f1)) {
       
  
-       // readfile("rule1.txt");
+      readfile("rule1.txt");
       branches.resize(0);
       rules.resize(0);
       branchLength = 1.0f;
@@ -199,15 +183,14 @@ namespace octet {
         { '+',"+" },
         { '-',"-" }
       };
-      angle = 27.5f;
-      iterations = 5;
+
         generateTree();
  
         
       }
       if (is_key_going_down(key_f2)) {
     
-        //readfile("rule2.txt");
+        readfile("rule2.txt");
        branches.resize(0);
        rules.resize(0);
        branchLength = 4.0f;
@@ -220,8 +203,6 @@ namespace octet {
           { '+',"+" },
           { '-',"-" }
         };
-        angle = 20.0f;
-        iterations = 5;
   
         generateTree();
         
@@ -229,7 +210,7 @@ namespace octet {
       }
       if (is_key_going_down(key_f3)) {
       
-       // readfile("rule3.txt");
+        readfile("rule3.txt");
         branches.resize(0);
         rules.resize(0);
         branchLength = 4.0f;
@@ -241,15 +222,13 @@ namespace octet {
           { '+',"+" },
           { '-',"-" }
         };
-        angle = 22.5f;
-        iterations = 4;
- 
+       
         generateTree();
        
       }
       if (is_key_going_down(key_f4)) {
       
-        //readfile("rule4.txt");
+        readfile("rule4.txt");
         branches.resize(0);
         rules.resize(0);
         branchLength = 1.0f;
@@ -262,9 +241,7 @@ namespace octet {
           { '+',"+" },
           { '-',"-" }
         };
-        angle = 20.0f;
-        iterations = 7;
-
+     
         generateTree();
        
       }
@@ -273,7 +250,7 @@ namespace octet {
         branches.resize(0);
         rules.resize(0);
         branchLength = 1.0f;
-       // readfile("rule5.txt");
+        readfile("rule5.txt");
         axiom = "X";
         rules = {
           {'X', "F[+X][-X]FX"},
@@ -283,15 +260,13 @@ namespace octet {
           { '+',"+" },
           { '-',"-" }
         };
-        angle = 25.7f;
-        iterations = 7;
-   
+      
         generateTree();
        
       }
       if (is_key_going_down(key_f6)) {
 
-        //readfile("rule6.txt");
+        readfile("rule6.txt");
         branches.resize(0);
         rules.resize(0);
         branchLength=4.0f;
@@ -304,15 +279,13 @@ namespace octet {
           { '+',"+" },
           { '-',"-" }
         };
-        angle = 22.5f;
-        iterations = 5;
-  
+       
         generateTree();
         
       }
       if (is_key_going_down(key_f7)) {
 
-        //readfile("rule6.txt");
+        readfile("rule7.txt");
         branches.resize(0);
         rules.resize(0);
         branchLength = 4.0f;
@@ -325,16 +298,14 @@ namespace octet {
           { '+',"+" },
           { '-',"-" }
         };
-        angle = 90.0f;
-        iterations = 2;
-
+       
         generateTree();
 
       }
 
       if (is_key_going_down(key_f8)) {
 
-        //readfile("rule6.txt");
+        readfile("rule8.txt");
         branches.resize(0);
         rules.resize(0);
         branchLength = 3.0f;
@@ -346,8 +317,7 @@ namespace octet {
           { '+',"+" },
           { '-',"-" }
         };
-        angle = 90.0f;
-        iterations = 4;
+   
         generateTree();
 
       }
