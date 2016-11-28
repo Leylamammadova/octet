@@ -428,6 +428,9 @@
       <Filter>containers</Filter>
     </ClInclude>
     <ClInclude Include="example_box.h" />
+    <ClInclude Include="BranchClass.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\resources\mesh_builder.inl">

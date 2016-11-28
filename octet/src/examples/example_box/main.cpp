@@ -12,6 +12,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include "BranchClass.h"
 #include "example_box.h"
 
 

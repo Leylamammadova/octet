@@ -38,6 +38,10 @@ namespace octet {
 	key_s = 83,
 	key_d = 68,
 	key_p = 80,
+  key_1=49,
+  key_2=50,
+  key_3=51,
+
 
     // other keys have the following codes:
     key_f1 = 0x80,

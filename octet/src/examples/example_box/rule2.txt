@@ -1,1 +1,2 @@
+axiomF
 F[+F]F[-F][F]
