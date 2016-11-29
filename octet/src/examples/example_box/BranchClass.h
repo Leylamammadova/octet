@@ -1,5 +1,5 @@
 #pragma once
-
+//recustructed Andy's sprite class
 namespace octet{
 class branch {
   mat4t modelToWorld;

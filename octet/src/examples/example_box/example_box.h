@@ -1,31 +1,26 @@
 
-
-
-//instead of sprites class this class to draw line between two points
-
 namespace octet {
 
   class lsystems : public app {
     
-
     mat4t modelToWorld;
     mat4t cameraToWorld;
     std::vector<branch>branches;
     std::vector<mat4t>stack; //for pushing and poping stacks [ and ]
-    std::string curInput,curOutput,axiom;
+    std::string curInput,curOutput,axiom; //string for parameters
 
     color_shader color_shader_; //initilaze color shader
 
     float branchLength; //size of branch
     int iterations;//number of iterations
     float angle; //angle for trees
-    
+    //rule structure
      struct rule {
-        char inChar;
-        std::string inString;
+        char inChar; //input characters
+        std::string inString; //input string
     };
     
-    std::vector<rule>rules;
+    std::vector<rule>rules; //vector for rules
  
 
   public:
@@ -37,11 +32,11 @@ namespace octet {
     
     vec4 treeColour;
     
-
+    //reading file
     void readfile(std::string filename) {
       std::ifstream myFile;
-     
       myFile.open(filename);
+
       if (myFile.is_open()) {
      
       std::cout << "reading your file\n";
@@ -58,13 +53,11 @@ namespace octet {
     }
     
  
-
     void app_init() {
       //initilize the shader
       color_shader_.init();
-      treeColour = vec4(0, 1, 0, 1);
+      treeColour = vec4(0, 1, 0, 1); //tree colour
       generateTree();
-
     }
 
    
@@ -76,22 +69,20 @@ namespace octet {
     void pop_stack() {
     modelToWorld=stack[stack.size()-1];
     stack.pop_back();
-    
     }
-
+    //function for drawing a line
     void makestick() {
       branch stick;
       stick.init(modelToWorld, treeColour, branchLength);
       branches.push_back(stick);
       modelToWorld.translate(0, branchLength, 0);
     }
-
+    //for Koch curve
     void movewithoutdraw() {
       modelToWorld.translate(0, branchLength, 0);
     }
-
+    //loop for rules and next generation
   void evolveTree()  {
-
     curInput.clear();
     curInput.clear(); 
     curInput = axiom;
@@ -114,7 +105,7 @@ namespace octet {
 
    
     void generateTree() {
-     
+     //switch case for input characters
       evolveTree();
       modelToWorld.loadIdentity();
       
@@ -148,7 +139,7 @@ namespace octet {
    }
 
 
-  //hotkeys
+  //hotkeys for trees iterations angle color and length
     void hotkey() {
     
       if (is_key_going_down(key_f1)) {
@@ -334,8 +325,6 @@ namespace octet {
         generateTree();
       }
 
-
-
   }
     //set the camera
     void camera() {
@@ -343,16 +332,15 @@ namespace octet {
       cameraToWorld.translate(0, 150.0f, 200.0f);
     }
 
-    /// this is called to draw the world
-
+    // this is called to draw the world
     void draw_world(int x, int y, int w, int h) {
-    
     camera();
     hotkey();
-    
+    //the box and background color
     glViewport(x, y, w, h);
     glClearColor(0.2f, 0, 0.3f, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //render the branches
     for (int i = 0; i < branches.size(); i++) {
       branches[i].render(color_shader_, cameraToWorld);
     }
