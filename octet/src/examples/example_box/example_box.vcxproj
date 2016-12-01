@@ -215,7 +215,7 @@
     <ClInclude Include="..\..\shaders\shader.h" />
     <ClInclude Include="..\..\shaders\shaders.h" />
     <ClInclude Include="..\..\shaders\texture_shader.h" />
-    <ClInclude Include="example_box.h" />
+    <ClInclude Include="L-systems.h" />
     <ClInclude Include="BranchClass.h" />
   </ItemGroup>
   <ItemGroup>

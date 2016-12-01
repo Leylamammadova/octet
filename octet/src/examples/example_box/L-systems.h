@@ -128,10 +128,10 @@ namespace octet {
         case ']': pop_stack();
           break;
 
-         case 'X': makestick();
+        case 'X': makestick();
           break;
 
-          case'f': movewithoutdraw();
+         case'f': movewithoutdraw();
           break;
         }
 

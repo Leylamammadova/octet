@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 #include "BranchClass.h"
-#include "example_box.h"
+#include "L-systems.h"
 
 
 /// Create a box with octet
