@@ -11,7 +11,7 @@
 
 #YouTube link:
 
-https://www.youtube.com/watch?v=kxJkdnniKGo
+https://www.youtube.com/watch?v=NhF_24f4cNs
 
 #Gameplay:
 Help this little ghost pass through the obstacles! Don’t let yourself stuck! As soon as you won’t be seen by camera the game is OVER.
@@ -76,7 +76,7 @@ http://www.cplusplus.com/forum/general/100714/
 
 #YouTube link:
 
-https://www.youtube.com/watch?v=n0m3O7l4h14
+https://www.youtube.com/watch?v=MZvtBk0MYgY
 
 
 #Objectives:
@@ -120,6 +120,4 @@ I didn’t use a csv (or another similar txt file) to add objects, because of th
 Now reading someone else sourse code and working in a new framework is not that confusing as it seemed in the begining. Since I've had a decent break in programming I have a positive attitude for this course and how it can affect on my posibilities and bring me closer to my dream job! 
 
 
-#Thanks 
-Thanks to Robert (links for reading a csv file) and Witek (explaining mesh instance) .
 
